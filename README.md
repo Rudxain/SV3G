@@ -51,7 +51,7 @@ Windows users _can only dream_ of such a feature (I feel the urge to say "I use 
 
 ## Why JS?
 
-This script started as a POSIX-compliant shell script, and I ported it to both Python and Javascript.
+This script started as a very basic POSIX-compliant shell script that printed a solid-color SVG. Then, I ported it to both Python and Javascript.
 
 I decided to not use Py, because devs tend to generate client-side SVGs in browsers, and browsers _usually_ (see [PyScript](https://pyscript.net)) use JS.
 
