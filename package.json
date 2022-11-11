@@ -1,13 +1,22 @@
 {
 "name": "sv3g",
-"version": "0.0.1",
-"description": "",
+"version": "0.0.2",
+"description": "This is just a program that I use to set the wallpaper in Linux Mint",
 "main": "main.js",
-"scripts": { "test": "node . test" },
-"author": "Rudxain",
-"license": "Unlicense",
+"bin": "main.js",
 "devDependencies": {
 	"@types/node": "^18.11.9",
 	"eslint": "^8.27.0"
-}
+},
+"scripts": { "test": "node . test" },
+"repository": {
+	"type": "git",
+	"url": "git+https://github.com/Rudxain/SVG-gradient-gen.git"
+},
+"author": "Rudxain",
+"license": "Unlicense",
+"bugs": {
+	"url": "https://github.com/Rudxain/SVG-gradient-gen/issues"
+},
+"homepage": "https://github.com/Rudxain/SVG-gradient-gen#readme"
 }
