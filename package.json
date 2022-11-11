@@ -1,15 +1,13 @@
 {
-  "name": "svg-gradient",
-  "version": "0.0.1",
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "test": "node . test"
-  },
-  "author": "Rudxain",
-  "license": "Unlicense",
-  "devDependencies": {
-    "@types/node": "^18.11.9",
-    "eslint": "^8.27.0"
-  }
+"name": "sv3g",
+"version": "0.0.1",
+"description": "",
+"main": "main.js",
+"scripts": { "test": "node . test" },
+"author": "Rudxain",
+"license": "Unlicense",
+"devDependencies": {
+	"@types/node": "^18.11.9",
+	"eslint": "^8.27.0"
+}
 }
