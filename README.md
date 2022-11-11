@@ -4,7 +4,7 @@ This is just a program that I use to set the wallpaper in Linux Mint
 
 ## Usage
 
-After you clone/download the repo (duh), you can use any (or all) of the following 4 scripts to get info about the program:
+After you clone/download the repo (duh), you can run any/all of the following 4 scripts to get info about the program:
 
 ```sh
 # outside
