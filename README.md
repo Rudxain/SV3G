@@ -7,14 +7,11 @@ Scalable Vector Graphics Gradient Generator
 After you clone/download the repo, you can run any/all of the following 4 scripts to get info about the program:
 
 ```sh
-# outside
 node SVG-gradient-gen /?
 
-# inside
 cd SVG-gradient-gen
 node . man
 
-# Linux only
 chmod 555 main.js
 ./main.js help
 
@@ -27,8 +24,6 @@ sv3g /?
 Personally, I use the script like this:
 
 ```sh
-# assuming WD = Desktop
-
 # when using dark-theme in a pitch-black room
 sv3g '#000' > bg.svg
 
