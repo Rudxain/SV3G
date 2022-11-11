@@ -1,6 +1,6 @@
 # SV3G
 
-This is just a program that I use to set the wallpaper in Linux Mint
+Scalable Vector Graphics Gradient Generator
 
 ## Usage
 
@@ -52,4 +52,4 @@ sv3g sky > bg.svg
 sv3g wb > bg.svg
 ```
 
-Since Linux Mint has an event-listener for wallpaper files, and bg.svg is already set as wallpaper, LM will detect the file-update and automatically change the wallpaper background. Nice! Windows users can only dream of such a feature (I feel the urge to say "I use Arch BTW", but I'm not worthy, LMAO)
+Since Linux Mint has an event-listener for wallpaper files, and bg.svg is already set as WP (by me), LM will detect the file-update and auto-change the WP background, nice! Windows users _can only dream_ of such a feature (I feel the urge to say "I use Arch BTW", but I'm not worthy, LMAO)
