@@ -52,4 +52,14 @@ sv3g sky > bg.svg
 sv3g wb > bg.svg
 ```
 
-Since Linux Mint has an event-listener for wallpaper files, and bg.svg is already set as WP (by me), LM will detect the file-update and auto-change the WP background, nice! Windows users _can only dream_ of such a feature (I feel the urge to say "I use Arch BTW", but I'm not worthy, LMAO)
+Since Linux Mint has an event-listener for wallpaper files, and bg.svg is already set as WP (by me), LM will detect the file-update and auto-change the WP background, nice!
+
+Windows users _can only dream_ of such a feature (I feel the urge to say "I use Arch BTW", but I'm not worthy, LMAO)
+
+## Why JS?
+
+This script started as a POSIX-compliant shell script, and I ported it to both Python and Javascript.
+
+I decided to not use Py, because devs tend to generate client-side SVGs in browsers, and browsers _usually_ (see [PyScript](https://pyscript.net)) use JS.
+
+I'm planning to turn this into a "dual" NPM package, both a program and a library, so that anyone can import the function used by the CLI
