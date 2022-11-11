@@ -19,7 +19,7 @@ sv3g /?
 
 ## Example
 
-Personally, I use the script like this:
+Personally, I use the script like this (in Linux Mint Cinnamon):
 
 ```sh
 # when using dark-theme in a pitch-black room
@@ -45,7 +45,7 @@ sv3g sky > bg.svg
 sv3g wb > bg.svg
 ```
 
-Since Linux Mint Cinnamon has an event-listener for wallpaper files, and bg.svg is already set as WP (by me), LM will detect the file-update and auto-change the WP background, nice!
+Since LMC has an event-listener for wallpaper files, and bg.svg is already set as WP (by me), LMC will detect the file-update and auto-change the WP background, nice!
 
 Windows users _can only dream_ of such a feature (I feel the urge to say "I use Arch BTW", but I'm not worthy, LMAO)
 
