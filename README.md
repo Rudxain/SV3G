@@ -1,9 +1,11 @@
 # SV3G
+
 This is just a program that I use to set the wallpaper in Linux Mint
 
 ## Usage
 
 After you clone/download the repo (duh), you can use any of the following 3 scripts to get info about the program:
+
 ```sh
 # outside
 node SVG-gradient-gen /?
@@ -20,6 +22,7 @@ chmod 644 main.js
 ## Example
 
 Personally, I use the script like this:
+
 ```sh
 # assuming WD and package are at the Desktop
 
