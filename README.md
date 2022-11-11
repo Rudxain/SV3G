@@ -10,6 +10,7 @@ node SV3G /?
 cd SV3G
 node . man
 
+# W^X for security
 chmod 555 main.js
 ./main.js help
 
