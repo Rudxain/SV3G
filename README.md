@@ -45,7 +45,7 @@ sv3g sky > bg.svg
 sv3g wb > bg.svg
 ```
 
-Since Linux Mint has an event-listener for wallpaper files, and bg.svg is already set as WP (by me), LM will detect the file-update and auto-change the WP background, nice!
+Since Linux Mint Cinnamon has an event-listener for wallpaper files, and bg.svg is already set as WP (by me), LM will detect the file-update and auto-change the WP background, nice!
 
 Windows users _can only dream_ of such a feature (I feel the urge to say "I use Arch BTW", but I'm not worthy, LMAO)
 
