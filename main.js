@@ -128,7 +128,7 @@ const main = (/**@type {string[]}*/ ...args) => {
 				'🌈': RAINBOW,
 				rgb: ['#f00', '#0f0', '#00f'],
 				sky: ['indigo', 'cyan', 'yellow', 'orange'],
-				mint: ['white', 'mint']
+				mint: ['white', 'green']
 			}))
 
 			const svg = svg_gradient('l', ...(getOwn(PRESET, sub_cmd) ?? args.slice(1)))
