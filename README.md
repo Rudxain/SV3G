@@ -4,7 +4,7 @@ Scalable Vector Graphics Gradient Generator
 
 ## Usage
 
-After you clone/download the repo (duh), you can run any/all of the following 4 scripts to get info about the program:
+After you clone/download the repo, you can run any/all of the following 4 scripts to get info about the program:
 
 ```sh
 # outside
