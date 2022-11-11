@@ -1,15 +1,13 @@
 # SV3G
 
-Scalable Vector Graphics Gradient Generator
-
 ## Usage
 
 After you clone/download the repo, you can run any/all of the following 4 scripts to get info about the program:
 
 ```sh
-node SVG-gradient-gen /?
+node SV3G /?
 
-cd SVG-gradient-gen
+cd SV3G
 node . man
 
 chmod 555 main.js
