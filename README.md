@@ -56,4 +56,6 @@ This script started as a very basic POSIX-compliant shell script that printed a 
 
 I decided to not use Py, because devs tend to generate client-side SVGs in browsers, and browsers _usually_ (see [PyScript](https://pyscript.net)) use JS.
 
-I'm planning to turn this into a "dual" NPM package, both a program and a library, so that anyone can import the function used by the CLI
+I'm planning to turn this into a "dual" NPM package, both a program and a library, so that anyone can import the function used by the CLI.
+
+Perhaps I should [RIIR](https://github.com/ansuz/RIIR)?
