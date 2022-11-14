@@ -119,13 +119,13 @@ const main = (/**@type {string[]}*/ ...args) => {
 
 		default: {
 			/** RYGCBM as CSS hex colors */
-			const
-				RAINBOW = Object.freeze(/**@type {const}*/([
-					'#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f'
-				])),
-				FIRE = Object.freeze(/**@type {const}*/([
-					'#000', '#700', '#f70', '#ff0', '#fff'
-				]))
+			const RAINBOW = Object.freeze(/**@type {const}*/([
+				'#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f'
+			]))
+			/**🔥*/
+			const FIRE = Object.freeze(/**@type {const}*/([
+				'#000', '#700', '#f70', '#ff0', '#fff'
+			]))
 
 			/** gradient presets */
 			const PRESET = Object.freeze(/**@type {const}*/({
