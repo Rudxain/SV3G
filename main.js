@@ -3,10 +3,9 @@
 
 /**
 Property access without traversing the prototype chain.
-@template {PropertyKey} K
 @template T
-@param {{[k: K]: T}} o
-@param {K} k
+@param {{[k: PropertyKey]: T}} o
+@param {PropertyKey} k
 @return {T | undefined}
 */
 const getOwn = (o, k) => Object.hasOwn(o, k) ? o[k] : undefined
@@ -47,21 +46,16 @@ If it is not provided, `undefined` is used instead.
 const findEntries = (a, predicate, thisArg) => findIndices(a, predicate, thisArg).map(i => [i, a[i]])
 
 /**
-Check if it _could_ be a valid CSS color `string`.
+Check if it _could_ be a valid CSS color.
 It only checks syntax, because it's intended to be future-proof and permissive.
-@template T
-@param {T} x
-@return {T extends string ? boolean : false}
+
+Warning: this has bugs, because it's extrmely permissive
+@param {string} x
 */
-const is_CSS_color = x => {
-	if (typeof x != 'string') return false
-
-	x = x.trim().toLowerCase() //WARNING. this removes \n ! fix later
-
-	//named | hex | fn
-	return /^(?:(?:#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8}))|(?:[a-z]+(?:\([\da-z., /%]+\))?))$/g
+const is_CSS_color = x =>
+	// named | hex | fn
+	/^ *(?:(?:#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8}))|(?:[a-z]+(?:\([\da-z., /%]+\))?)) *$/gi
 		.test(x)
-}
 
 /**
 generate a SVG gradient using passed CSS colors
