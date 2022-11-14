@@ -1,6 +1,6 @@
 {
 "name": "sv3g",
-"version": "0.0.2",
+"version": "0.1.0",
 "description": "Prints SVG containing a gradient whose colors are based on CLI args",
 "main": "main.js",
 "bin": "main.js",

@@ -76,7 +76,7 @@ const svg_gradient = (type = 'l', ...colors) => {
 	}
 
 	/**@type {'linear'|'radial'}*/
-	const t = getOwn(/**@type {const}*/{l: 'linear', r: 'radial'}, type) ?? 'linear'
+	const t = getOwn(/**@type {const}*/{ l: 'linear', r: 'radial' }, type) ?? 'linear'
 
 	return '<?xml version="1.0" encoding="utf-8"?>' +
 		//should this have a viewBox?
@@ -94,7 +94,7 @@ const svg_gradient = (type = 'l', ...colors) => {
 }
 
 const main = (/**@type {string[]}*/ ...args) => {
-	const {log, error: err} = console
+	const { log, error: err } = console
 
 	if (args.length < 2) {
 		const NO_ARG_TXT = `No arguments provided. Run "${args[0]} help" for more info`
@@ -119,7 +119,13 @@ const main = (/**@type {string[]}*/ ...args) => {
 
 		default: {
 			/** RYGCBM as CSS hex colors */
-			const RAINBOW = Object.freeze(/**@type {const}*/(['#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f']))
+			const
+				RAINBOW = Object.freeze(/**@type {const}*/([
+					'#f00', '#ff0', '#0f0', '#0ff', '#00f', '#f0f'
+				])),
+				FIRE = Object.freeze(/**@type {const}*/([
+					'#000', '#700', '#f70', '#ff0', '#fff'
+				]))
 
 			/** gradient presets */
 			const PRESET = Object.freeze(/**@type {const}*/({
@@ -127,8 +133,10 @@ const main = (/**@type {string[]}*/ ...args) => {
 				rainbow: RAINBOW,
 				'🌈': RAINBOW,
 				rgb: ['#f00', '#0f0', '#00f'],
-				sky: ['indigo', 'cyan', 'yellow', 'orange'],
-				mint: ['white', 'green']
+				sky: ['#00e', '#07e', '#0ff'],
+				mint: ['#fff', '#0e1'],
+				fire: FIRE,
+				'🔥': FIRE
 			}))
 
 			const svg = svg_gradient('l', ...(getOwn(PRESET, sub_cmd) ?? args.slice(1)))
