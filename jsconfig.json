@@ -1,8 +1,8 @@
 {
 "compilerOptions": {
 	"checkJs": true,
-	"lib": ["ES2022", "ESNext", "DOM"],
-	"target": "ES2022",
+	"lib": ["ESNext", "DOM"],
+	"target": "ESNext",
 	"strict": true
 },
 "exclude": [ "node_modules" ]
