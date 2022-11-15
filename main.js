@@ -176,7 +176,7 @@ const main = (/**@type {string[]}*/ ...args) => {
 				['bruh(0deg 0rad 0grad)', true]
 			]
 
-			const fails = TESTS.filter(x => is_CSS_color(x[0]) != x[1])
+			const fails = TESTS.filter(([c, b]) => is_CSS_color(c) != b)
 
 			if (fails.length > 0) {
 				const FAIL_TXT = 'tests failed...\n'
