@@ -49,14 +49,21 @@ const findEntries = (a, predicate, thisArg) => findIndices(a, predicate, thisArg
 Regular Expression for a _potentially valid_ CSS color.
 It only checks syntax, because it's intended to be future-proof and permissive.
 
-Format: hex | named | fn.
 The sub-regex for fn notation has bugs.
 */
-const CSS_COLOR =
-	/^ *(?:(?:#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8}))|(?:[a-z]+(?:\([\da-z., /%]+\))?)) *$/gi
+const CSS_COLOR = RegExp(
+	'^ *(?:' +
+	// hex
+	'(?:#(?:[\\da-f]{3,4}|[\\da-f]{6}|[\\da-f]{8}))' +
+	'|' +
+	// named | fn
+	'(?:[a-z]+(?:\\\\([\\da-z.,/% ]+\\\\))?))' +
+	' *$',
+	'gi'
+)
 
 /**
-tests against {@link CSS_COLOR}
+{@link RegExp.prototype.test}s against {@link CSS_COLOR}
 @param {string} x
 */
 const is_CSS_color = x => CSS_COLOR.test(x)
