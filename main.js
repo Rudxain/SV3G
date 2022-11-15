@@ -46,27 +46,25 @@ If it is not provided, `undefined` is used instead.
 const findEntries = (a, predicate, thisArg) => findIndices(a, predicate, thisArg).map(i => [i, a[i]])
 
 /**
-Regular Expression for a _potentially valid_ CSS color.
+{@link RegExp.prototype.test}s against a Regular Expression for a _potentially valid_ CSS color.
 It only checks syntax, because it's intended to be future-proof and permissive.
 
 The sub-regex for fn notation has bugs.
-*/
-const CSS_COLOR = RegExp(
-	'^ *(?:' +
-	// hex
-	'(?:#(?:[\\da-f]{3,4}|[\\da-f]{6}|[\\da-f]{8}))' +
-	'|' +
-	// named | fn
-	'(?:[a-z]+(?:\\\\([\\da-z.,/% ]+\\\\))?))' +
-	' *$',
-	'gi'
-)
-
-/**
-{@link RegExp.prototype.test}s against {@link CSS_COLOR}
 @param {string} x
 */
-const is_CSS_color = x => CSS_COLOR.test(x)
+const is_CSS_color = x => {
+	x = x.trim().toLowerCase()
+
+	/** lowercase hex notation */
+	const HEX = /^#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/g
+	if (HEX.test(x)) return true
+
+	/** named-color, or functional notation */
+	const NAMED_FN = /^[a-z]+(?:\([\da-z.,/% ]+\))?$/g
+	if (NAMED_FN.test(x)) return true
+
+	return false
+}
 
 /**
 generate a SVG gradient using passed CSS colors
