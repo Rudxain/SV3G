@@ -46,16 +46,20 @@ If it is not provided, `undefined` is used instead.
 const findEntries = (a, predicate, thisArg) => findIndices(a, predicate, thisArg).map(i => [i, a[i]])
 
 /**
-Check if it _could_ be a valid CSS color.
+Regular Expression for a _potentially valid_ CSS color.
 It only checks syntax, because it's intended to be future-proof and permissive.
 
-Warning: this has bugs, because it's extrmely permissive
+Format: hex | named | fn.
+The sub-regex for fn notation has bugs.
+*/
+const CSS_COLOR =
+	/^ *(?:(?:#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8}))|(?:[a-z]+(?:\([\da-z., /%]+\))?)) *$/gi
+
+/**
+tests against {@link CSS_COLOR}
 @param {string} x
 */
-const is_CSS_color = x =>
-	// named | hex | fn
-	/^ *(?:(?:#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8}))|(?:[a-z]+(?:\([\da-z., /%]+\))?)) *$/gi
-		.test(x)
+const is_CSS_color = x => CSS_COLOR.test(x)
 
 /**
 generate a SVG gradient using passed CSS colors
@@ -144,7 +148,14 @@ const main = (/**@type {string[]}*/ ...args) => {
 			/**@type {[string, boolean][]}*/
 			const TESTS = [
 				['', false],
-				['amogus', true],
+				['   ', false],
+				[' amogus ', true],
+				['amogus ', true],
+				[' amongus', true],
+				[' Amongus', true],
+				[' Amogus ', true],
+				['Amogus ', true],
+				['mogus ', true],
 				['#', false],
 				['#ff7', true],
 				['#ff70', true],
@@ -170,6 +181,7 @@ const main = (/**@type {string[]}*/ ...args) => {
 			if (fails.length > 0) {
 				const FAIL_TXT = 'tests failed...\n'
 				err(FAIL_TXT, fails)
+				process.exitCode = 1
 				return FAIL_TXT
 			}
 			else {
