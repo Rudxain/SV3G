@@ -122,6 +122,12 @@ const main = (/**@type {string[]}*/ ...args) => {
 			return HELP_TXT
 		}
 
+		case 'custom': {
+			const svg = svg_gradient('l', ...args.slice(1))
+			log(svg)
+			return svg
+		}
+
 		default: {
 			/** RYGCBM as CSS hex colors */
 			const RAINBOW = Object.freeze(/**@type {const}*/([
@@ -144,7 +150,12 @@ const main = (/**@type {string[]}*/ ...args) => {
 				'🔥': FIRE
 			}))
 
-			const svg = svg_gradient('l', ...(getOwn(PRESET, sub_cmd) ?? args.slice(1)))
+			const pre = getOwn(PRESET, sub_cmd)
+			if (pre === undefined)
+				throw new SyntaxError(
+					`Unrecognized sub-command:\n${sub_cmd}\nUse "help" to get list of valid ones`
+				)
+			const svg = svg_gradient('l', ...pre)
 			log(svg)
 			return svg
 		}
