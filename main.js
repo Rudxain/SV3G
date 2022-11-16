@@ -149,10 +149,12 @@ const main = (/**@type {string[]}*/ ...args) => {
 			}))
 
 			const pre = getOwn(PRESET, sub_cmd)
-			if (pre === undefined)
-				throw new SyntaxError(
-					`Unrecognized sub-command:\n${sub_cmd}\nUse "help" to get list of valid ones`
-				)
+			if (pre === undefined) {
+				const SUBCMD_TXT = `Unrecognized sub-command:\n${sub_cmd}\nUse "help" to get list of valid ones`
+				err(SUBCMD_TXT)
+				process.exitCode = 1
+				return SUBCMD_TXT
+			}
 			const svg = svg_gradient('l', ...pre)
 			log(svg)
 			return svg
