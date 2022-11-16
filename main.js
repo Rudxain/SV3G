@@ -109,19 +109,21 @@ const main = (/**@type {string[]}*/ ...args) => {
 	switch (sub_cmd) {
 		case 'help': case 'man': case '/?': {
 			const HELP_TXT =
-				`usage: ${args[0]} [subcommand] colors...\n` +
+				`usage: ${args[0]} <subcommand> [colors...]\n` +
 				'help | man | /?: print this text\n' +
 				'wb : grayscale\n' +
 				'rainbow | 🌈: RYGCBM\n' +
 				'rgb : Red, Green, Blue\n' +
 				'sky : like a skybox\n' +
-				'mint : Linux Mint'
+				'mint : Linux Mint\n' +
+				'fire | 🔥 : is it a candle?\n' +
+				'custom : to specify arbitrary colors'
 			log(HELP_TXT)
 			return HELP_TXT
 		}
 
 		case 'custom': {
-			const svg = svg_gradient('l', ...args.slice(1))
+			const svg = svg_gradient('l', ...args.slice(2))
 			log(svg)
 			return svg
 		}

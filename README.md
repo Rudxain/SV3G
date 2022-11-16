@@ -24,29 +24,29 @@ Personally, I use the script like this (in Linux Mint Cinnamon):
 
 ```sh
 # when using dark-theme in a pitch-black room
-sv3g '#000' > bg.svg
+sv3g custom '#000' > .wp.svg
 
 # bloody dark, to reduce blue-light emission
-sv3g '#700' '#000' > bg.svg
+sv3g custom '#700' '#000' > .wp.svg
 # I also set the accent color to red in that case
 
 # when using light-theme with "mint-green" accent color
-sv3g mint > bg.svg
+sv3g mint > .wp.svg
 
 # when I want to be fully awake and focused
-sv3g '#fff' > bg.svg
+sv3g custom '#fff' > .wp.svg
 
 # pride lol (I usually don't use this, because it's too colorful)
-sv3g rainbow > bg.svg
+sv3g rainbow > .wp.svg
 
-# if I'm feeln' fancy
-sv3g sky > bg.svg
+# warm and comfy
+sv3g fire > .wp.svg
 
 # when I just need focus
-sv3g wb > bg.svg
+sv3g wb > .wp.svg
 ```
 
-Since LMC has an event-listener for wallpaper files, and bg.svg is already set as WP (by me), LMC will detect the file-update and auto-change the WP background, nice!
+Since LMC has an event-listener for wallpaper files, and .wp.svg is already set as WP (by me), LMC will detect the file-update and auto-change the WP background, nice!
 
 Windows users _can only dream_ of such a feature (I feel the urge to say "I use Arch BTW", but I'm not worthy, LMAO)
 
