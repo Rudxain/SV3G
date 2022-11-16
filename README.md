@@ -14,7 +14,7 @@ node . man
 chmod 555 main.js
 ./main.js help
 
-npm link
+sudo npm link
 sv3g ℹ️
 ```
 
