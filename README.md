@@ -15,7 +15,7 @@ chmod 555 main.js
 ./main.js help
 
 npm link
-sv3g /?
+sv3g ℹ️
 ```
 
 ## Example

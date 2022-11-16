@@ -59,8 +59,10 @@ const is_CSS_color = x => {
 	const HEX = /^#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/g
 	if (HEX.test(x)) return true
 
+	const FN_ARG = '(?:(?:[a-z\\d]+-)*\\.?[a-z\\d]+%?)'
+
 	/** named-color, or functional notation */
-	const NAMED_FN = /^[a-z]+(?:\([\da-z.,/% ]+\))?$/g
+	const NAMED_FN = RegExp(`^[a-z]+(?:\\\\( *${FN_ARG} *,? *${FN_ARG} *[/,]? *${FN_ARG} *\\\\))?$`, 'g')
 	if (NAMED_FN.test(x)) return true
 
 	return false
@@ -78,8 +80,7 @@ const svg_gradient = (type = 'l', ...colors) => {
 			throw new SyntaxError('invalid CSS colors:\n' + JSON.stringify(invalid_cols))
 	}
 
-	/**@type {'linear'|'radial'}*/
-	const t = getOwn(/**@type {const}*/{ l: 'linear', r: 'radial' }, type) ?? 'linear'
+	const t = /**@type {const}*/({ l: 'linear', r: 'radial' })[type]
 
 	return '<?xml version="1.0" encoding="utf-8"?>' +
 		//should this have a viewBox?
@@ -99,18 +100,22 @@ const svg_gradient = (type = 'l', ...colors) => {
 const main = (/**@type {string[]}*/ ...args) => {
 	const { log, error: err } = console
 
+	const NAME = 'sv3g'
+
 	if (args.length < 2) {
-		const NO_ARG_TXT = `No arguments provided. Run "${args[0]} help" for more info`
+		const NO_ARG_TXT = /**@type {const}*/(`No arguments provided. Run "${NAME} help" for more info`)
 		err(NO_ARG_TXT)
 		return NO_ARG_TXT
 	}
 
 	const sub_cmd = args[1].toLowerCase()
 	switch (sub_cmd) {
-		case 'help': case 'man': case '/?': {
+		case 'help': case 'man':
+		case '/?': case '❔': case '❓':
+		case 'ℹ️': case 'ℹ': {
 			const HELP_TXT =
 				`usage: ${args[0]} <subcommand> [colors...]\n` +
-				'help | man | /?: print this text\n' +
+				'help | man | /? | ❔ | ❓ | ℹ️ | ℹ : print this text\n' +
 				'wb : grayscale\n' +
 				'rainbow | 🌈: RYGCBM\n' +
 				'rgb : Red, Green, Blue\n' +
@@ -152,10 +157,10 @@ const main = (/**@type {string[]}*/ ...args) => {
 
 			const pre = getOwn(PRESET, sub_cmd)
 			if (pre === undefined) {
-				const SUBCMD_TXT = `Unrecognized sub-command:\n${sub_cmd}\nUse "help" to get list of valid ones`
-				err(SUBCMD_TXT)
+				const subcmd_err = `Unrecognized sub-command:\n${sub_cmd}\nRun "${NAME} help" to get list of valid ones`
+				err(subcmd_err)
 				process.exitCode = 1
-				return SUBCMD_TXT
+				return subcmd_err
 			}
 			const svg = svg_gradient('l', ...pre)
 			log(svg)
@@ -165,17 +170,13 @@ const main = (/**@type {string[]}*/ ...args) => {
 		case 'test': {
 			log('testing CSS color validator...')
 
-			/**@type {[string, boolean][]}*/
-			const TESTS = [
+			const TESTS = Object.freeze(/**@type {const}*/([
 				['', false],
 				['   ', false],
-				[' amogus ', true],
-				['amogus ', true],
-				[' amongus', true],
-				[' Amongus', true],
+				[' ', false],
 				[' Amogus ', true],
 				['Amogus ', true],
-				['mogus ', true],
+				[' Amongus', true],
 				['#', false],
 				['#ff7', true],
 				['#ff70', true],
@@ -185,18 +186,18 @@ const main = (/**@type {string[]}*/ ...args) => {
 				['#00000000', true],
 				['#0000000', false],
 				['#yyy', false],
-				['bruh(hey)', true],
+				['bruh(hey)', false],
 				['bruh (hey)', false],
 				['bruh(0', false],
 				['bruh0)', false],
 				['bruh 0)', false],
-				['bruh(0)', true],
+				['bruh(0)', false],
 				['bruh(0,0,0)', true],
 				['bruh(0%, 0%, 0%)', true],
 				['bruh(0deg 0rad 0grad)', true]
-			]
+			]))
 
-			const fails = TESTS.filter(([c, b]) => is_CSS_color(c) != b)
+			const fails = TESTS.filter(([c, b]) => is_CSS_color(c) !== b)
 
 			if (fails.length > 0) {
 				const FAIL_TXT = 'tests failed...\n'
