@@ -59,3 +59,9 @@ I decided to not use Py, because devs tend to generate client-side SVGs in brows
 I'm planning to turn this into a "dual" NPM package, both a program and a library, so that anyone can import the function used by the CLI.
 
 Perhaps I should [RIIR](https://github.com/ansuz/RIIR)?
+
+## Disclaimer
+
+This is (mostly) a tool I use personally, so I'm not responsible for keeping backwards-compatibility, nor to notify about breaking-changes. I may rewrite this in any lang, and target any environment, **at any time without warning**.
+
+I just posted this for people who may have similar (not identical) needs. Use at your own risk
