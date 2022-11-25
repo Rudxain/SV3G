@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "SV3G"
+name = "sv3g"
 version = "0.1.0"
