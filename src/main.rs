@@ -32,21 +32,28 @@ use sv3g::*;
 #[derive(Debug, PartialEq)]
 enum SubCmds {
 	Help,
-	Custom,
 	Wb,
 	Rainbow,
 	Rgb,
 	Sky,
 	Mint,
 	Fire,
+	Custom,
 }
 
 impl FromStr for SubCmds {
 	type Err = ();
 
-	fn from_str(input: &str) -> Result<SubCmds, Self::Err> {
+	fn from_str(input: &str) -> Result<Self, Self::Err> {
 		match input {
-			"help" => Ok(SubCmds::Help),
+			"help" | "man" | "/?" | "❔" | "❓" | "ℹ️" | "ℹ" => Ok(Self::Help),
+			"wb" => Ok(Self::Wb),
+			"rainbow" | "🌈" => Ok(Self::Rainbow),
+			"rgb" => Ok(Self::Rgb),
+			"sky" => Ok(Self::Sky),
+			"mint" => Ok(Self::Mint),
+			"fire" | "🔥" => Ok(Self::Fire),
+			"custom" => Ok(Self::Custom),
 			_ => Err(()),
 		}
 	}
