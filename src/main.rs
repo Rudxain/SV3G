@@ -26,8 +26,10 @@
 	clippy::float_cmp_const
 )]
 
+use core::str::FromStr;
 use sv3g::*;
 
+#[derive(Debug, PartialEq)]
 enum SubCmds {
 	Help,
 	Custom,
@@ -36,8 +38,18 @@ enum SubCmds {
 	Rgb,
 	Sky,
 	Mint,
-	Fire
+	Fire,
 }
 
-fn main() {
+impl FromStr for SubCmds {
+	type Err = ();
+
+	fn from_str(input: &str) -> Result<SubCmds, Self::Err> {
+		match input {
+			"help" => Ok(SubCmds::Help),
+			_ => Err(()),
+		}
+	}
 }
+
+fn main() {}
