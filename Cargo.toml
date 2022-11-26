@@ -2,3 +2,8 @@
 name = "sv3g"
 version = "0.1.0"
 edition = "2021"
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
