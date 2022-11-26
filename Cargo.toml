@@ -2,6 +2,7 @@
 name = "sv3g"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/Rudxain/SV3G"
 
 [profile.release]
 strip = true
