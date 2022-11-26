@@ -8,6 +8,6 @@ literal-representation-threshold = 16
 too-many-lines-threshold = 64
 trivial-copy-size-limit = 2
 max-include-file-size = 262144
-type-complexity-threshold = 32
+type-complexity-threshold = 64
 max-trait-bounds = 1
 vec-box-size-threshold = 1024
