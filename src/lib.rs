@@ -9,16 +9,27 @@ pub enum GradientType {
 }
 
 impl fmt::Display for GradientType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            GradientType::Linear => write!(f, "linear"),
-            GradientType::Radial => write!(f, "radial"),
-        }
-    }
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		match self {
+			GradientType::Linear => write!(f, "linear"),
+			GradientType::Radial => write!(f, "radial"),
+		}
+	}
 }
 
-pub fn generate(t: GradientType, colors: Vec<&str>) -> &str {
+pub fn generate(t: GradientType, colors: Vec<String>) -> String {
+	use fmt::Write as _;
+
 	let t = t.to_string();
 
-	return &colors.into_iter().map(|c| *c).collect::<Vec<&str>>().join("");
+	colors
+		.into_iter()
+		.enumerate()
+		.map(|(i, mut c)| {
+			c = "".to_string();
+			let _ = write!(c, "{}", 0);
+			c
+		})
+		.collect::<Vec<String>>()
+		.join("")
 }
