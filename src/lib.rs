@@ -21,14 +21,15 @@ pub fn generate(t: GradientType, colors: Vec<String>) -> String {
 	use fmt::Write as _;
 
 	let t = t.to_string();
+	let size = colors.len();
 
 	colors
 		.into_iter()
 		.enumerate()
-		.map(|(i, mut c)| {
-			c = "".to_string();
-			let _ = write!(c, "{}", 0);
-			c
+		.map(|(i, c)| {
+			let s = String::with_capacity(size * 5);
+			let _ = write!(s, "<stop offset=\"{}%\" stop-color=\"{}\"/>", i / (size - i.max(1)) * 100, c);
+			s
 		})
 		.collect::<Vec<String>>()
 		.join("")
