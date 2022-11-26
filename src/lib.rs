@@ -1,7 +1,7 @@
 #![deny(clippy::unwrap_used)]
 #![forbid(clippy::exit)]
 
-use std::fmt;
+use core::fmt;
 
 pub enum GradientType {
 	Linear,
