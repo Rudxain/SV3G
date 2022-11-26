@@ -20,17 +20,50 @@ impl fmt::Display for GradientType {
 pub fn generate(t: GradientType, colors: Vec<String>) -> String {
 	use fmt::Write as _;
 
-	let t = t.to_string();
 	let size = colors.len();
 
-	colors
+	let part = colors
 		.into_iter()
 		.enumerate()
 		.map(|(i, c)| {
-			let s = String::with_capacity(size * 5);
-			let _ = write!(s, "<stop offset=\"{}%\" stop-color=\"{}\"/>", i / (size - i.max(1)) * 100, c);
+			let mut s = String::with_capacity(c.len() + 16);
+			let _ = write!(
+				s,
+				"<stop offset=\"{}%\" stop-color=\"{}\"/>",
+				i * 100 / (size - i.min(1)),
+				c
+			);
 			s
 		})
 		.collect::<Vec<String>>()
-		.join("")
+		.join("");
+
+	let mut out = String::with_capacity(part.len() + 64);
+
+	let _ = write!(
+		out,
+		// this is so ugly
+		"{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}",
+		"<?xml version=\"1.0\" encoding=\"utf-8\"?>",
+		// should this have a viewBox?
+		"<svg xmlns=\"http://www.w3.org/2000/svg\">",
+		"<defs>",
+		"<",
+		t,
+		"Gradient id=\"g\"",
+		match t {
+			GradientType::Linear => " gradientTransform=\"rotate(90)\"",
+			GradientType::Radial => "",
+		},
+		">",
+		part,
+		"</",
+		t,
+		"Gradient>",
+		"</defs>",
+		"<rect width=\"100%\" height=\"100%\" fill=\"url('#g')\"/>",
+		"</svg>"
+	);
+
+	out
 }
