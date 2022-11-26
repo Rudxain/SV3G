@@ -1,0 +1,13 @@
+#![deny(clippy::unwrap_used)]
+#![forbid(
+	clippy::exit,
+	clippy::mem_forget,
+	clippy::large_include_file,
+	clippy::fn_to_numeric_cast_any,
+	clippy::cast_precision_loss,
+	clippy::float_arithmetic,
+	clippy::excessive_precision,
+	clippy::lossy_float_literal,
+	clippy::float_cmp,
+	clippy::float_cmp_const
+)]
