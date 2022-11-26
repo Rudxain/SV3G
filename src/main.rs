@@ -26,6 +26,18 @@
 	clippy::float_cmp_const
 )]
 
+use sv3g::*;
+
+enum SubCmds {
+	Help,
+	Custom,
+	Wb,
+	Rainbow,
+	Rgb,
+	Sky,
+	Mint,
+	Fire
+}
+
 fn main() {
-	println!("Hello, world!");
 }
