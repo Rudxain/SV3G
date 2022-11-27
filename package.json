@@ -1,18 +1,11 @@
 {
 "name": "sv3g",
 "version": "0.4.0",
-"description": "Prints SVG containing a gradient whose colors are based on CLI args",
 "main": "main.js",
 "bin": "main.js",
-"scripts": { "test": "node . test" },
 "repository": {
 	"type": "git",
 	"url": "git+https://github.com/Rudxain/SV3G.git"
-},
-"author": "Rudxain",
-"license": "Unlicense",
-"bugs": {
-	"url": "https://github.com/Rudxain/SV3G/issues"
 },
 "homepage": "https://github.com/Rudxain/SV3G#readme"
 }

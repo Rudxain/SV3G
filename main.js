@@ -46,38 +46,15 @@ If it is not provided, `undefined` is used instead.
 const findEntries = (a, predicate, thisArg) => findIndices(a, predicate, thisArg).map(i => [i, a[i]])
 
 /**
-{@link RegExp.prototype.test}s against a Regular Expression for a _potentially valid_ CSS color.
-It only checks syntax, because it's intended to be future-proof and permissive.
-
-The sub-regex for fn notation has bugs.
-@param {string} x
-*/
-const is_CSS_color = x => {
-	x = x.trim().toLowerCase()
-
-	/** lowercase hex notation */
-	const HEX = /^#(?:[\da-f]{3,4}|[\da-f]{6}|[\da-f]{8})$/g
-	if (HEX.test(x)) return true
-
-	const FN_ARG = '(?:(?:[a-z\\d]+-)*\\.?[a-z\\d]+%?)'
-
-	/** named-color, or functional notation */
-	const NAMED_FN = RegExp(`^[a-z]+(?:\\\\( *${FN_ARG} *,? *${FN_ARG} *[/,]? *${FN_ARG} *\\\\))?$`, 'g')
-	if (NAMED_FN.test(x)) return true
-
-	return false
-}
-
-/**
 generate a SVG gradient using passed CSS colors
 @param {'l'|'r'} type l: linear (vertical), r: radial
 @param {...string} colors
 */
-const svg_gradient = (type = 'l', ...colors) => {
+const generator = (type = 'l', ...colors) => {
 	{
-		const invalid_cols = findEntries(colors, x => !is_CSS_color(x))
+		const invalid_cols = findEntries(colors, x => x.includes('"'))
 		if (invalid_cols.length)
-			throw new SyntaxError('invalid CSS colors:\n' + JSON.stringify(invalid_cols))
+			throw new SyntaxError('CSS colors cannot contain quotes:\n' + JSON.stringify(invalid_cols))
 	}
 
 	const t = /**@type {const}*/({ l: 'linear', r: 'radial' })[type]
@@ -92,7 +69,6 @@ const svg_gradient = (type = 'l', ...colors) => {
 		).join('') +
 		`</${t}Gradient>` +
 		'</defs>' +
-		//eslint-disable-next-line quotes
 		`<rect width="100%" height="100%" fill="url('#g')"/>` +
 		'</svg>'
 }
@@ -128,7 +104,7 @@ const main = (/**@type {string[]}*/ ...args) => {
 		}
 
 		case 'custom': {
-			const svg = svg_gradient('l', ...args.slice(2))
+			const svg = generator('l', ...args.slice(2))
 			log(svg)
 			return svg
 		}
@@ -162,54 +138,9 @@ const main = (/**@type {string[]}*/ ...args) => {
 				process.exitCode = 1
 				return subcmd_err
 			}
-			const svg = svg_gradient('l', ...pre)
+			const svg = generator('l', ...pre)
 			log(svg)
 			return svg
-		}
-
-		case 'test': {
-			log('testing CSS color validator...')
-
-			const TESTS = Object.freeze(/**@type {const}*/([
-				['', false],
-				['   ', false],
-				[' ', false],
-				[' Amogus ', true],
-				['Amogus ', true],
-				[' Amongus', true],
-				['#', false],
-				['#ff7', true],
-				['#ff70', true],
-				['#ff', false],
-				['#ff700', false],
-				['#000000', true],
-				['#00000000', true],
-				['#0000000', false],
-				['#yyy', false],
-				['bruh(hey)', false],
-				['bruh (hey)', false],
-				['bruh(0', false],
-				['bruh0)', false],
-				['bruh 0)', false],
-				['bruh(0)', false],
-				['bruh(0,0,0)', true],
-				['bruh(0%, 0%, 0%)', true],
-				['bruh(0deg 0rad 0grad)', true]
-			]))
-
-			const fails = TESTS.filter(([c, b]) => is_CSS_color(c) !== b)
-
-			if (fails.length > 0) {
-				const FAIL_TXT = 'tests failed...\n'
-				err(FAIL_TXT, fails)
-				process.exitCode = 1
-				return FAIL_TXT
-			}
-			else {
-				const PASSED_TXT = 'tests succesfully passed!'
-				log(PASSED_TXT)
-				return PASSED_TXT
-			}
 		}
 	}
 }
