@@ -13,6 +13,7 @@
 	clippy::empty_structs_with_brackets,
 	clippy::format_push_string
 )]
+#![allow(clippy::cargo_common_metadata)]
 #![forbid(
 	unsafe_code,
 	clippy::mem_forget,
@@ -26,7 +27,6 @@
 	clippy::float_cmp_const
 )]
 
-use core::str::FromStr;
 use sv3g::*;
 
 #[derive(Debug, PartialEq)]
@@ -41,7 +41,7 @@ enum SubCmds {
 	Custom,
 }
 
-impl FromStr for SubCmds {
+impl core::str::FromStr for SubCmds {
 	type Err = ();
 
 	fn from_str(input: &str) -> Result<Self, Self::Err> {
@@ -59,4 +59,7 @@ impl FromStr for SubCmds {
 	}
 }
 
-fn main() {}
+fn main() {
+	const NAME: &str = "sv3g";
+
+}
