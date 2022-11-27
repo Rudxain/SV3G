@@ -2,6 +2,9 @@
 
 ## Usage
 
+**Don't.** This is still WIP, go to [this branch](https://github.com/Rudxain/SV3G/tree/legacy-js) in the meantime.
+
+However, if you want to continue anyways, run this:
 ```sh
 cargo install --git https://github.com/Rudxain/SV3G.git && sv3g help
 ```
