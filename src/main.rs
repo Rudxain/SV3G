@@ -27,6 +27,8 @@
 	clippy::float_cmp_const
 )]
 
+use std::{process::ExitCode, str::FromStr};
+
 use sv3g::*;
 
 #[derive(Debug, PartialEq)]
@@ -45,7 +47,7 @@ impl core::str::FromStr for SubCmds {
 	type Err = ();
 
 	fn from_str(input: &str) -> Result<Self, Self::Err> {
-		match input {
+		match input.to_ascii_lowercase().as_str() {
 			"help" | "man" | "/?" | "❔" | "❓" | "ℹ️" | "ℹ" => Ok(Self::Help),
 			"wb" => Ok(Self::Wb),
 			"rainbow" | "🌈" => Ok(Self::Rainbow),
@@ -59,8 +61,29 @@ impl core::str::FromStr for SubCmds {
 	}
 }
 
-fn main() {
+fn main() -> ExitCode {
+	use std::env::args;
 	const NAME: &str = "sv3g";
 
-	let args: Vec<String> = std::env::args().skip(1).collect();
+	let argv: Vec<String> = args().skip(1).collect();
+
+	if argv.is_empty() {
+		eprintln!("No arguments provided. Run `{} help` for more info", NAME);
+		return ExitCode::SUCCESS;
+	}
+
+	let subcmd = SubCmds::from_str(argv[0].as_str());
+
+	if subcmd == Err(()) {
+		eprintln!(
+			"Unrecognized sub-command:\n${}\nRun `{} help` to get list of valid ones",
+			argv[0], NAME
+		);
+		return ExitCode::FAILURE;
+	};
+
+	#[allow(clippy::unwrap_used)]
+	let subcmd = subcmd.unwrap();
+
+	ExitCode::SUCCESS
 }
