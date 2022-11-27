@@ -34,7 +34,7 @@ use sv3g::*;
 #[derive(Debug, PartialEq)]
 enum SubCmds {
 	Help,
-	Wb,
+	Wb([String; 2]),
 	Rainbow,
 	Rgb,
 	Sky,
@@ -49,7 +49,7 @@ impl core::str::FromStr for SubCmds {
 	fn from_str(input: &str) -> Result<Self, Self::Err> {
 		match input.to_ascii_lowercase().as_str() {
 			"help" | "man" | "/?" | "❔" | "❓" | "ℹ️" | "ℹ" => Ok(Self::Help),
-			"wb" => Ok(Self::Wb),
+			"wb" => Ok(Self::Wb(["#fff".to_string(), "#000".to_string()])),
 			"rainbow" | "🌈" => Ok(Self::Rainbow),
 			"rgb" => Ok(Self::Rgb),
 			"sky" => Ok(Self::Sky),
