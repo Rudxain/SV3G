@@ -17,20 +17,28 @@ impl fmt::Display for GradientType {
 	}
 }
 
-pub fn generate(t: GradientType, colors: Vec<String>) -> String {
+/// returns an `Err` if any color contains `"`, regardless if it's escaped or not.
+///
+/// this "syntax validation" is done for security reasons (prevent code injection).
+pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ()> {
 	use fmt::Write as _;
 
-	let size = colors.len();
+	if colors.iter().any(|x| x.contains('"')) {
+		return Err(());
+	}
 
-	let part = colors
+	let color_count = colors.len();
+
+	let body = colors
 		.into_iter()
 		.enumerate()
 		.map(|(i, c)| {
+			// `+ 16` is temporary. to-do: use a better estimation
 			let mut s = String::with_capacity(c.len() + 16);
 			let _ = write!(
 				s,
 				"<stop offset=\"{}%\" stop-color=\"{}\"/>",
-				i * 100 / (size - i.min(1)),
+				i * 100 / (color_count - i.min(1)),
 				c
 			);
 			s
@@ -38,32 +46,31 @@ pub fn generate(t: GradientType, colors: Vec<String>) -> String {
 		.collect::<Vec<String>>()
 		.join("");
 
-	let mut out = String::with_capacity(part.len() + 64);
+	// `+ 64` is temporary. to-do: use a better estimation
+	let mut out = String::with_capacity(body.len() + 64);
 
 	let _ = write!(
 		out,
-		// this is so ugly
-		"{}{}{}{}{}{}{}{}{}{}{}{}{}{}{}",
-		"<?xml version=\"1.0\" encoding=\"utf-8\"?>",
 		// should this have a viewBox?
-		"<svg xmlns=\"http://www.w3.org/2000/svg\">",
-		"<defs>",
-		"<",
+		"\
+		<?xml version=\"1.0\" encoding=\"utf-8\"?>\
+		<svg xmlns=\"http://www.w3.org/2000/svg\">\
+		<defs>\
+		<{}Gradient id=\"g\"{}>\
+		{}\
+		</{}Gradient>\
+		</defs>\
+		<rect width=\"100%\" height=\"100%\" fill=\"url('#g')\"/>\
+		</svg>\
+		",
 		t,
-		"Gradient id=\"g\"",
 		match t {
 			GradientType::Linear => " gradientTransform=\"rotate(90)\"",
 			GradientType::Radial => "",
 		},
-		">",
-		part,
-		"</",
-		t,
-		"Gradient>",
-		"</defs>",
-		"<rect width=\"100%\" height=\"100%\" fill=\"url('#g')\"/>",
-		"</svg>"
+		body,
+		t
 	);
 
-	out
+	Ok(out)
 }
