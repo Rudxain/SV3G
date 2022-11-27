@@ -11,7 +11,7 @@ cargo install --git https://github.com/Rudxain/SV3G.git && sv3g help
 
 ## Example
 
-Personally, I use the script like this (in Linux Mint Cinnamon):
+Personally, I use the program like this (in Linux Mint Cinnamon):
 
 ```sh
 # when using dark-theme in a pitch-black room
