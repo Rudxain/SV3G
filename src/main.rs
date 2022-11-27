@@ -85,5 +85,22 @@ fn main() -> ExitCode {
 	#[allow(clippy::unwrap_used)]
 	let subcmd = subcmd.unwrap();
 
+	match subcmd {
+		SubCmds::Help => {
+			println!("\
+				usage: {NAME} <subcommand> [colors...]\n\
+				help | man | /? | ❔ | ❓ | ℹ️ | ℹ : print this text\n\
+				wb : grayscale\n\
+				rainbow | 🌈: RYGCBM\n\
+				rgb : Red, Green, Blue\n\
+				sky : like a skybox\n\
+				mint : Linux Mint\n\
+				fire | 🔥 : is it a candle?\n\
+				custom : to specify arbitrary colors\
+			")
+		},
+		_ => {}
+	}
+
 	ExitCode::SUCCESS
 }
