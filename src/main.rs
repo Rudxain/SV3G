@@ -62,4 +62,5 @@ impl core::str::FromStr for SubCmds {
 fn main() {
 	const NAME: &str = "sv3g";
 
+	let args: Vec<String> = std::env::args().skip(1).collect();
 }
