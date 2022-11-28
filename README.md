@@ -54,3 +54,7 @@ Then, I did a [RIIR](https://github.com/ansuz/RIIR) and here we are!
 This is (mostly) a tool I use personally, so I'm not responsible for keeping backwards-compatibility, nor to notify about breaking-changes. I may rewrite this in any lang, and target any environment, **at any time without warning**.
 
 I just posted this for people who may have similar (not identical) needs. Use at your own risk.
+
+## Related
+
+https://llamalab.com/automate/community/flows/42305
