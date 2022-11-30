@@ -33,13 +33,19 @@ sv3g rainbow > .wp.svg
 # warm and comfy
 sv3g fire > .wp.svg
 
-# when I just need focus
+# when I just need focus and elegance
 sv3g wb > .wp.svg
 ```
 
 Since LMC has an event-listener for wallpaper files, and .wp.svg is already set as WP (by me), LMC will detect the file-update and auto-change the WP background, nice!
 
 Windows users _can only dream_ of such a feature (I feel the urge to say "I use Arch BTW", but I'm not worthy, LMAO)
+
+And yes, I know LMC already has a "no picture gradient" feature, but it has 2 disadvantages:
+1. Only supports 2 colors
+2. [It isn't shown in the login screen](https://github.com/linuxmint/cinnamon/issues/11229)
+
+The funny thing is that SVGs without `viewBox` aren't rendered correctly in the login screen, so SV3G doesn't fully solve my problem, it's just a dirty patch, lol
 
 ## Why Rust?
 
