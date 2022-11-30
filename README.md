@@ -49,7 +49,7 @@ The funny thing is that SVGs without `viewBox` aren't rendered correctly in the 
 
 ## Why Rust?
 
-This script started as a very basic POSIX-compliant shell script that printed a solid-color SVG. Then, I ported it to both Python and Javascript.
+This started as a very basic POSIX-compliant shell script that printed a solid-color SVG. Then, I ported it to both Python and Javascript.
 
 I decided to not use Py, because devs tend to generate client-side SVGs in browsers, and browsers _usually_ (see [PyScript](https://pyscript.net)) use JS.
 
