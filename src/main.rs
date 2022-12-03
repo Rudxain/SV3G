@@ -83,12 +83,16 @@ impl core::str::FromStr for SubCmds {
 	}
 }
 
+fn print_known(c: &[String]) {
+	println!("{}", generate(GradientType::Linear, c.to_vec()).unwrap())
+}
+
+#[allow(clippy::too_many_lines)] // lmao
 fn main() -> ExitCode {
 	use std::env::args;
 	const NAME: &str = "sv3g";
 
 	let argv: Vec<String> = args().skip(1).collect();
-
 	if argv.is_empty() {
 		eprintln!("No arguments provided. Run `{} help` for more info", NAME);
 		return ExitCode::SUCCESS;
@@ -127,13 +131,23 @@ fn main() -> ExitCode {
 			);
 		}
 		SubCmds::Wb(c) => {
-
+			print_known(&c);
 		}
-		SubCmds::Rainbow(c) => {}
-		SubCmds::Rgb(c) => {}
-		SubCmds::Sky(c) => {}
-		SubCmds::Mint(c) => {}
-		SubCmds::Fire(c) => {}
+		SubCmds::Rainbow(c) => {
+			print_known(&c);
+		}
+		SubCmds::Rgb(c) => {
+			print_known(&c);
+		}
+		SubCmds::Sky(c) => {
+			print_known(&c);
+		}
+		SubCmds::Mint(c) => {
+			print_known(&c);
+		}
+		SubCmds::Fire(c) => {
+			print_known(&c);
+		}
 		SubCmds::Custom => {
 			match generate(GradientType::Linear, argv) {
 				Ok(svg) => {
