@@ -47,13 +47,13 @@ impl core::str::FromStr for SubCmds {
 	type Err = ();
 
 	fn from_str(input: &str) -> Result<Self, Self::Err> {
-		match input.to_ascii_lowercase().as_str() {
-			"help" | "man" | "/?" | "❔" | "❓" | "ℹ️" | "ℹ" => Ok(Self::Help),
-			"wb" => Ok(Self::Wb(["#fff".to_string(), "#000".to_string()])),
+		match input {
+			"help" | "HELP" | "man" | "/?" | "❔" | "❓" | "ℹ️" | "ℹ" => Ok(Self::Help),
+			"wb" | "WB" => Ok(Self::Wb(["#fff".to_string(), "#000".to_string()])),
 			"rainbow" | "🌈" => Ok(Self::Rainbow),
-			"rgb" => Ok(Self::Rgb),
+			"rgb" | "RGB"=> Ok(Self::Rgb),
 			"sky" => Ok(Self::Sky),
-			"mint" => Ok(Self::Mint),
+			"mint" | "Mint" => Ok(Self::Mint),
 			"fire" | "🔥" => Ok(Self::Fire),
 			"custom" => Ok(Self::Custom),
 			_ => Err(()),
