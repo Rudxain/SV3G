@@ -98,11 +98,7 @@ fn main() -> ExitCode {
 		return ExitCode::SUCCESS;
 	}
 
-	// is there a better way?
-	let mut argv = argv;
-	let subcmd = SubCmds::from_str(argv.remove(0).as_str());
-	let argv = argv;
-
+	let subcmd = SubCmds::from_str(argv[0].as_str());
 	if subcmd == Err(()) {
 		eprintln!(
 			"Unrecognized sub-command:\n${}\nRun `{} help` to get list of valid ones",
@@ -110,6 +106,11 @@ fn main() -> ExitCode {
 		);
 		return ExitCode::FAILURE;
 	};
+
+	// is there a better way?
+	let mut argv = argv;
+	argv.remove(0);
+	let argv = argv;
 
 	// this feels redundant
 	let subcmd = subcmd.unwrap();
