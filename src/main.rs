@@ -84,7 +84,7 @@ impl core::str::FromStr for SubCmds {
 }
 
 fn print_known(c: &[String]) {
-	println!("{}", generate(GradientType::Linear, c.to_vec()).unwrap())
+	println!("{}", generate(GradientType::Linear, c.to_vec()).unwrap());
 }
 
 #[allow(clippy::too_many_lines)] // lmao
@@ -130,19 +130,13 @@ fn main() -> ExitCode {
 			"
 			);
 		}
-		SubCmds::Wb(c) => {
+		SubCmds::Wb(c) | SubCmds::Mint(c) => {
 			print_known(&c);
 		}
 		SubCmds::Rainbow(c) => {
 			print_known(&c);
 		}
-		SubCmds::Rgb(c) => {
-			print_known(&c);
-		}
-		SubCmds::Sky(c) => {
-			print_known(&c);
-		}
-		SubCmds::Mint(c) => {
+		SubCmds::Rgb(c) | SubCmds::Sky(c) => {
 			print_known(&c);
 		}
 		SubCmds::Fire(c) => {
