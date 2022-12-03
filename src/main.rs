@@ -35,9 +35,9 @@ use sv3g::*;
 enum SubCmds {
 	Help,
 	Wb([String; 2]),
-	Rainbow,
-	Rgb,
-	Sky,
+	Rainbow([String; 6]),
+	Rgb([String; 3]),
+	Sky([String; 2]),
 	Mint,
 	Fire,
 	Custom,
