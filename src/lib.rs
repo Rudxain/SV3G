@@ -17,6 +17,18 @@ impl fmt::Display for GradientType {
 	}
 }
 
+impl core::str::FromStr for GradientType {
+	type Err = ();
+
+	fn from_str(input: &str) -> Result<Self, Self::Err> {
+		match input.to_ascii_lowercase().as_str() {
+			"l" | "linear" => Ok(Self::Linear),
+			"r" | "radial" => Ok(Self::Radial),
+			_ => Err(()),
+		}
+	}
+}
+
 /// returns an `Err` if any color contains `"`, regardless if it's escaped or not.
 ///
 /// this "syntax validation" is done for security reasons (prevent code injection).
