@@ -120,12 +120,12 @@ fn main() -> ExitCode {
 			println!(
 				"\
 				usage: {NAME} <subcommand> [colors...]\n\
-				help | man | /? | ❔ | ❓ | ℹ️ | ℹ : print this text\n\
-				wb : grayscale\n\
+				help | HELP | man | /? | ❔ | ❓ | ℹ️ | ℹ : print this text\n\
+				wb | WB: grayscale\n\
 				rainbow | 🌈: RYGCBM\n\
-				rgb : Red, Green, Blue\n\
+				rgb | RGB: Red, Green, Blue\n\
 				sky : like a skybox\n\
-				mint : Linux Mint\n\
+				mint | Mint : Linux Mint\n\
 				fire | 🔥 : is it a candle?\n\
 				custom : to specify arbitrary colors\
 			"
