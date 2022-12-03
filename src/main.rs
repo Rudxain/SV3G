@@ -29,6 +29,7 @@
 
 use std::{process::ExitCode, str::FromStr};
 
+#[allow(clippy::wildcard_imports)]
 use sv3g::*;
 
 #[derive(Debug, PartialEq)]
@@ -37,9 +38,9 @@ enum SubCmds {
 	Wb([String; 2]),
 	Rainbow([String; 6]),
 	Rgb([String; 3]),
-	Sky([String; 2]),
-	Mint,
-	Fire,
+	Sky([String; 3]),
+	Mint([String; 2]),
+	Fire([String; 5]),
 	Custom,
 }
 
@@ -50,11 +51,33 @@ impl core::str::FromStr for SubCmds {
 		match input {
 			"help" | "HELP" | "man" | "/?" | "❔" | "❓" | "ℹ️" | "ℹ" => Ok(Self::Help),
 			"wb" | "WB" => Ok(Self::Wb(["#fff".to_string(), "#000".to_string()])),
-			"rainbow" | "🌈" => Ok(Self::Rainbow),
-			"rgb" | "RGB"=> Ok(Self::Rgb),
-			"sky" => Ok(Self::Sky),
-			"mint" | "Mint" => Ok(Self::Mint),
-			"fire" | "🔥" => Ok(Self::Fire),
+			// this is so redundant
+			"rainbow" | "🌈" => Ok(Self::Rainbow([
+				"#f00".to_string(),
+				"#ff0".to_string(),
+				"#0f0".to_string(),
+				"#0ff".to_string(),
+				"#00f".to_string(),
+				"#f0f".to_string(),
+			])),
+			"rgb" | "RGB" => Ok(Self::Rgb([
+				"#f00".to_string(),
+				"#0f0".to_string(),
+				"#00f".to_string(),
+			])),
+			"sky" => Ok(Self::Sky([
+				"#00e".to_string(),
+				"#07e".to_string(),
+				"#0ff".to_string(),
+			])),
+			"mint" | "Mint" => Ok(Self::Mint(["#fff".to_string(), "#0e1".to_string()])),
+			"fire" | "🔥" => Ok(Self::Fire([
+				"#000".to_string(),
+				"#700".to_string(),
+				"#f70".to_string(),
+				"#ff0".to_string(),
+				"#fff".to_string(),
+			])),
 			"custom" => Ok(Self::Custom),
 			_ => Err(()),
 		}
@@ -72,7 +95,10 @@ fn main() -> ExitCode {
 		return ExitCode::SUCCESS;
 	}
 
-	let subcmd = SubCmds::from_str(argv[0].as_str());
+	// is there a better way?
+	let mut argv = argv;
+	let subcmd = SubCmds::from_str(argv.remove(0).as_str());
+	let argv = argv;
 
 	if subcmd == Err(()) {
 		eprintln!(
@@ -87,7 +113,8 @@ fn main() -> ExitCode {
 
 	match subcmd {
 		SubCmds::Help => {
-			println!("\
+			println!(
+				"\
 				usage: {NAME} <subcommand> [colors...]\n\
 				help | man | /? | ❔ | ❓ | ℹ️ | ℹ : print this text\n\
 				wb : grayscale\n\
@@ -97,8 +124,18 @@ fn main() -> ExitCode {
 				mint : Linux Mint\n\
 				fire | 🔥 : is it a candle?\n\
 				custom : to specify arbitrary colors\
-			")
-		},
+			"
+			);
+		}
+		SubCmds::Custom => {
+			if let Ok(svg) = generate(GradientType::Linear, argv) {
+				println!("{}", svg);
+				return ExitCode::SUCCESS;
+			}
+
+			eprint!("CSS colors cannot contain quotes");
+			return ExitCode::FAILURE;
+		}
 		_ => {}
 	}
 
