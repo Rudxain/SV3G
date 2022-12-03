@@ -101,7 +101,7 @@ fn main() -> ExitCode {
 	let subcmd = SubCmds::from_str(argv[0].as_str());
 	if subcmd == Err(()) {
 		eprintln!(
-			"Unrecognized sub-command:\n${}\nRun `{} help` to get list of valid ones",
+			"Unrecognized sub-command:\n{}\nRun `{} help` to get list of valid ones",
 			argv[0], NAME
 		);
 		return ExitCode::FAILURE;
