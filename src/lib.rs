@@ -29,14 +29,27 @@ impl core::str::FromStr for GradientType {
 	}
 }
 
+#[derive(Debug)]
+pub struct ColorQuotes;
+
+impl fmt::Display for ColorQuotes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "CSS colors must not contain quotes")
+    }
+}
+
+impl std::error::Error for ColorQuotes { }
+
+pub fn read_u8() -> Result<u8, ColorQuotes> { Err(ColorQuotes) }
+
 /// returns an `Err` if any color contains `"`, regardless if it's escaped or not.
 ///
 /// this "syntax validation" is done for security reasons (prevent code injection).
-pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ()> {
+pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ColorQuotes> {
 	use fmt::Write as _;
 
 	if colors.iter().any(|x| x.contains('"')) {
-		return Err(());
+		return Err(ColorQuotes);
 	}
 
 	let color_count = colors.len();
