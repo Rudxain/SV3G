@@ -2,7 +2,6 @@
 	unused,
 	future_incompatible,
 	clippy::exit,
-	clippy::unwrap_used,
 	clippy::cargo,
 	clippy::pedantic,
 	clippy::nursery,
@@ -108,7 +107,7 @@ fn main() -> ExitCode {
 		return ExitCode::FAILURE;
 	};
 
-	#[allow(clippy::unwrap_used)]
+	// this feels redundant
 	let subcmd = subcmd.unwrap();
 
 	match subcmd {
@@ -127,16 +126,25 @@ fn main() -> ExitCode {
 			"
 			);
 		}
-		SubCmds::Custom => {
-			if let Ok(svg) = generate(GradientType::Linear, argv) {
-				println!("{}", svg);
-				return ExitCode::SUCCESS;
-			}
+		SubCmds::Wb(c) => {
 
-			eprint!("CSS colors cannot contain quotes");
-			return ExitCode::FAILURE;
 		}
-		_ => {}
+		SubCmds::Rainbow(c) => {}
+		SubCmds::Rgb(c) => {}
+		SubCmds::Sky(c) => {}
+		SubCmds::Mint(c) => {}
+		SubCmds::Fire(c) => {}
+		SubCmds::Custom => {
+			match generate(GradientType::Linear, argv) {
+				Ok(svg) => {
+					println!("{}", svg);
+				}
+				Err(e) => {
+					eprint!("{}", e);
+					return ExitCode::FAILURE;
+				}
+			};
+		}
 	}
 
 	ExitCode::SUCCESS
