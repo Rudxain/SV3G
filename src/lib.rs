@@ -3,6 +3,34 @@
 
 use core::fmt;
 
+const LINE: &str = "linear";
+const RAD: &str = "radial";
+/*
+// is this really a good idea?
+// I just want to validate colors at compile-time, to avoid `unwrap`
+/// 32bit color value
+pub struct Color32 {
+	/// red
+	r: u8,
+	/// green
+	g: u8,
+	/// blue
+	b: u8,
+	/// alpha
+	a: u8
+}
+
+impl Color32 {
+	pub fn new(r: u8, g: u8, b: u8, a: u8) -> Self { Self { r, g, b, a } }
+}
+
+impl fmt::Display for Color32 {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "#{:02x}{:02x}{:02x}{:02x}", self.r, self.g, self.b, self.a)
+	}
+}
+*/
+
 pub enum GradientType {
 	Linear,
 	Radial,
@@ -12,8 +40,8 @@ pub enum GradientType {
 impl fmt::Display for GradientType {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		match self {
-			GradientType::Linear => write!(f, "linear"),
-			GradientType::Radial => write!(f, "radial"),
+			GradientType::Linear => write!(f, "{}", LINE),
+			GradientType::Radial => write!(f, "{}", RAD),
 		}
 	}
 }
@@ -21,10 +49,10 @@ impl fmt::Display for GradientType {
 impl core::str::FromStr for GradientType {
 	type Err = ();
 
-	fn from_str(input: &str) -> Result<Self, Self::Err> {
-		match input.to_ascii_lowercase().as_str() {
-			"l" | "linear" => Ok(Self::Linear),
-			"r" | "radial" => Ok(Self::Radial),
+	fn from_str(s: &str) -> Result<Self, Self::Err> {
+		match s.to_ascii_lowercase().as_str() {
+			"l" | LINE => Ok(Self::Linear),
+			"r" | RAD => Ok(Self::Radial),
 			_ => Err(()),
 		}
 	}
@@ -34,19 +62,21 @@ impl core::str::FromStr for GradientType {
 pub struct ColorQuotes;
 
 impl fmt::Display for ColorQuotes {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CSS colors must not contain quotes")
-    }
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		write!(f, "CSS colors must not contain quotes")
+	}
 }
 
 // to-do: use `core` when stable
-impl std::error::Error for ColorQuotes { }
+impl std::error::Error for ColorQuotes {}
 
-pub fn read_u8() -> Result<u8, ColorQuotes> { Err(ColorQuotes) }
+pub fn read_u8() -> Result<u8, ColorQuotes> {
+	Err(ColorQuotes)
+}
 
 /// returns an `Err` if any color contains `"`, regardless if it's escaped or not.
 ///
-/// this "syntax validation" is done for security reasons (prevent code injection).
+/// this syntax validation is done for security reasons (prevent code injection).
 pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ColorQuotes> {
 	use fmt::Write as _;
 
@@ -65,8 +95,11 @@ pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ColorQuo
 			let mut s = String::with_capacity(c.len() + 16);
 			let _ = write!(
 				s,
+				// is the percent really necessary?
+				// can we avoid the `* 100`?
 				"<stop offset=\"{}%\" stop-color=\"{}\"/>",
-				// sat_mul should be faster than float mul
+				// this double conversion is annoying for me
+				// I'm using floats just to div and print, feels a lil hacky
 				i.saturating_mul(100) as f64 / (color_count - i.min(1)) as f64,
 				c
 			);
