@@ -1,7 +1,13 @@
 #![deny(clippy::unwrap_used)]
 #![forbid(clippy::exit)]
+#![warn(clippy::pedantic, clippy::nursery)]
 
 use core::fmt;
+
+#[allow(clippy::cast_precision_loss)]
+fn div_usize_as_f64(n: usize, d: usize) -> f64 {
+	n as f64 / d as f64
+}
 
 const LINE: &str = "linear";
 const RAD: &str = "radial";
@@ -40,8 +46,8 @@ pub enum GradientType {
 impl fmt::Display for GradientType {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		match self {
-			GradientType::Linear => write!(f, "{}", LINE),
-			GradientType::Radial => write!(f, "{}", RAD),
+			Self::Linear => write!(f, "{}", LINE),
+			Self::Radial => write!(f, "{}", RAD),
 		}
 	}
 }
@@ -70,13 +76,12 @@ impl fmt::Display for ColorQuotes {
 // to-do: use `core` when stable
 impl std::error::Error for ColorQuotes {}
 
-pub fn read_u8() -> Result<u8, ColorQuotes> {
-	Err(ColorQuotes)
-}
-
 /// returns an `Err` if any color contains `"`, regardless if it's escaped or not.
 ///
 /// this syntax validation is done for security reasons (prevent code injection).
+///
+/// # Errors
+/// `ColorQuotes`: happens when the string contains 1 or more double quotes (")
 pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ColorQuotes> {
 	use fmt::Write as _;
 
@@ -95,18 +100,13 @@ pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ColorQuo
 			let mut s = String::with_capacity(c.len() + 16);
 			let _ = write!(
 				s,
-				// is the percent really necessary?
-				// can we avoid the `* 100`?
-				"<stop offset=\"{}%\" stop-color=\"{}\"/>",
-				// this double conversion is annoying for me
-				// I'm using floats just to div and print, feels a lil hacky
-				i.saturating_mul(100) as f64 / (color_count - i.min(1)) as f64,
+				"<stop offset=\"{}\" stop-color=\"{}\"/>",
+				div_usize_as_f64(i, color_count - i.min(1)),
 				c
 			);
 			s
 		})
-		.collect::<Vec<String>>()
-		.join("");
+		.collect::<String>();
 
 	// `+ 64` is temporary. to-do: use a better estimation
 	let mut out = String::with_capacity(body.len() + 64);
