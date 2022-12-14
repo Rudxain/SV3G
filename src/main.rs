@@ -85,7 +85,7 @@ impl core::str::FromStr for SubCmds {
 
 fn print_known(c: &[String]) {
 	// to-do: validate const colors at compile-time
-	println!("{}", generate(GradientType::Linear, c.to_vec()).unwrap());
+	println!("{}", generate(&GradientType::Linear, c.to_vec()).unwrap());
 }
 
 #[allow(clippy::too_many_lines)] // lmao
@@ -145,7 +145,7 @@ fn main() -> ExitCode {
 			print_known(&c);
 		}
 		SubCmds::Custom => {
-			match generate(GradientType::Linear, argv) {
+			match generate(&GradientType::Linear, argv) {
 				Ok(svg) => {
 					println!("{}", svg);
 				}

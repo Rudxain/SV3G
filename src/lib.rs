@@ -1,10 +1,31 @@
-#![deny(clippy::unwrap_used)]
-#![forbid(clippy::exit)]
-#![warn(clippy::pedantic, clippy::nursery)]
+#![warn(
+	unused,
+	future_incompatible,
+	clippy::pedantic,
+	clippy::nursery,
+	clippy::shadow_unrelated,
+	clippy::string_to_string,
+	clippy::decimal_literal_representation,
+	clippy::unseparated_literal_suffix,
+	clippy::empty_structs_with_brackets,
+	clippy::format_push_string
+)]
+#![deny(clippy::unwrap_used, clippy::float_arithmetic)]
+#![forbid(
+	unsafe_code,
+	clippy::exit,
+	clippy::mem_forget,
+	clippy::large_include_file,
+	clippy::fn_to_numeric_cast_any,
+	clippy::excessive_precision,
+	clippy::lossy_float_literal,
+	clippy::float_cmp,
+	clippy::float_cmp_const
+)]
 
 use core::fmt;
 
-#[allow(clippy::cast_precision_loss)]
+#[allow(clippy::cast_precision_loss, clippy::float_arithmetic)]
 fn div_usize_as_f64(n: usize, d: usize) -> f64 {
 	n as f64 / d as f64
 }
@@ -82,7 +103,7 @@ impl std::error::Error for ColorQuotes {}
 ///
 /// # Errors
 /// `ColorQuotes`: happens when the string contains 1 or more double quotes (")
-pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ColorQuotes> {
+pub fn generate(t: &GradientType, colors: Vec<String>) -> Result<String, ColorQuotes> {
 	use fmt::Write as _;
 
 	if colors.iter().any(|x| x.contains('"')) {
@@ -96,8 +117,8 @@ pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ColorQuo
 		.into_iter()
 		.enumerate()
 		.map(|(i, c)| {
-			// `+ 16` is temporary. to-do: use a better estimation
-			let mut s = String::with_capacity(c.len() + 16);
+			// `+ 0x10` is temporary. to-do: use a better estimation
+			let mut s = String::with_capacity(c.len() + 0x10);
 			let _ = write!(
 				s,
 				"<stop offset=\"{}\" stop-color=\"{}\"/>",
@@ -108,8 +129,8 @@ pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ColorQuo
 		})
 		.collect::<String>();
 
-	// `+ 64` is temporary. to-do: use a better estimation
-	let mut out = String::with_capacity(body.len() + 64);
+	// `+ 0x40` is temporary. to-do: use a better estimation
+	let mut out = String::with_capacity(body.len() + 0x40);
 
 	let _ = write!(
 		out,
