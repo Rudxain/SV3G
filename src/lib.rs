@@ -6,6 +6,7 @@ use core::fmt;
 pub enum GradientType {
 	Linear,
 	Radial,
+	//Conic
 }
 
 impl fmt::Display for GradientType {
@@ -38,6 +39,7 @@ impl fmt::Display for ColorQuotes {
     }
 }
 
+// to-do: use `core` when stable
 impl std::error::Error for ColorQuotes { }
 
 pub fn read_u8() -> Result<u8, ColorQuotes> { Err(ColorQuotes) }
@@ -52,6 +54,7 @@ pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ColorQuo
 		return Err(ColorQuotes);
 	}
 
+	// avoid borrow
 	let color_count = colors.len();
 
 	let body = colors
@@ -63,7 +66,8 @@ pub fn generate(t: GradientType, colors: Vec<String>) -> Result<String, ColorQuo
 			let _ = write!(
 				s,
 				"<stop offset=\"{}%\" stop-color=\"{}\"/>",
-				i * 100 / (color_count - i.min(1)),
+				// sat_mul should be faster than float mul
+				i.saturating_mul(100) as f64 / (color_count - i.min(1)) as f64,
 				c
 			);
 			s
