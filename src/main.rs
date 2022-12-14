@@ -84,6 +84,7 @@ impl core::str::FromStr for SubCmds {
 }
 
 fn print_known(c: &[String]) {
+	// to-do: validate const colors at compile-time
 	println!("{}", generate(GradientType::Linear, c.to_vec()).unwrap());
 }
 
