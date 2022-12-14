@@ -8,3 +8,4 @@ repository = "https://github.com/Rudxain/SV3G"
 strip = true
 lto = true
 codegen-units = 1
+panic = "abort"
