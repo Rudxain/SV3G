@@ -124,7 +124,7 @@ pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
 	// avoid borrow
 	let color_count = colors.len();
 
-	let body = colors
+	let body: String = colors
 		.into_iter()
 		.enumerate()
 		.map(|(i, c)| {
@@ -138,7 +138,7 @@ pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
 			);
 			s
 		})
-		.collect::<String>();
+		.collect();
 
 	// `+ 0x40` is temporary. to-do: use a better estimation
 	let mut out = String::with_capacity(body.len() + 0x40);
