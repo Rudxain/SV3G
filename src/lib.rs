@@ -36,6 +36,7 @@ const RAD: &str = "radial";
 /// just like `Path` is internally an `OsStr`,
 /// this `struct` is just a `String`,
 /// but guaranteed to be a subset, such that it matches the syntax of CSS colors
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct CSSColor {
 	inner: String,
 }
@@ -59,6 +60,7 @@ impl CSSColor {
 		Ok(Self { inner: s })
 	}
 }
+
 impl fmt::Display for CSSColor {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		write!(f, "{}", self.inner)
@@ -113,12 +115,11 @@ impl std::error::Error for ColorQuotes {}
 /// ## Errors
 ///
 /// `ColorQuotes`: happens when the string contains 1 or more double quotes (")
-pub fn generate(t: &GradientType, colors: Vec<String>) -> Result<String, ColorQuotes> {
+#[must_use]
+pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
 	use fmt::Write as _;
 
-	if colors.iter().any(|x| x.contains('"')) {
-		return Err(ColorQuotes);
-	}
+	let colors: Vec<String> = colors.into_iter().map(|c| c.to_string()).collect();
 
 	// avoid borrow
 	let color_count = colors.len();
@@ -165,5 +166,5 @@ pub fn generate(t: &GradientType, colors: Vec<String>) -> Result<String, ColorQu
 		t
 	);
 
-	Ok(out)
+	out
 }

@@ -26,24 +26,28 @@
 	clippy::float_cmp_const
 )]
 
-use std::{process::ExitCode, str::FromStr};
+use std::{process::ExitCode, result, str::FromStr};
 
 #[allow(clippy::wildcard_imports)]
 use sv3g::*;
 
-#[derive(Debug, PartialEq)]
+fn css_color_from_str(s: &str) -> CSSColor {
+	CSSColor::new(s.to_string()).unwrap()
+}
+
 // I decided to use wrapper variants,
 // because they are better for compile-time checks (AFAIK)
+#[derive(Debug, PartialEq)]
 enum SubCmds {
 	Help,
 	/// white and black
-	Wb([String; 2]),
+	Wb([CSSColor; 2]),
 	/// 🌈
-	Rainbow([String; 6]),
+	Rainbow([CSSColor; 6]),
 	// skybox
-	Sky([String; 3]),
-	Mint([String; 2]),
-	Fire([String; 5]),
+	Sky([CSSColor; 3]),
+	Mint([CSSColor; 2]),
+	Fire([CSSColor; 5]),
 	Custom,
 }
 
@@ -53,28 +57,34 @@ impl core::str::FromStr for SubCmds {
 	fn from_str(input: &str) -> Result<Self, Self::Err> {
 		match input {
 			"help" | "HELP" | "man" | "/?" | "❔" | "❓" | "ℹ️" | "ℹ" => Ok(Self::Help),
-			"wb" | "WB" => Ok(Self::Wb(["#fff".to_string(), "#000".to_string()])),
+			"wb" | "WB" => Ok(Self::Wb([
+				css_color_from_str("#fff"),
+				css_color_from_str("#000"),
+			])),
 			// I know, this is horrible
 			"rainbow" | "🌈" => Ok(Self::Rainbow([
-				"#f00".to_string(),
-				"#ff0".to_string(),
-				"#0f0".to_string(),
-				"#0ff".to_string(),
-				"#00f".to_string(),
-				"#f0f".to_string(),
+				css_color_from_str("#f00"),
+				css_color_from_str("#ff0"),
+				css_color_from_str("#0f0"),
+				css_color_from_str("#0ff"),
+				css_color_from_str("#00f"),
+				css_color_from_str("#f0f"),
 			])),
 			"sky" => Ok(Self::Sky([
-				"#00e".to_string(),
-				"#07e".to_string(),
-				"#0ff".to_string(),
+				css_color_from_str("#00e"),
+				css_color_from_str("#07e"),
+				css_color_from_str("#0ff"),
 			])),
-			"mint" | "Mint" => Ok(Self::Mint(["#fff".to_string(), "#0e1".to_string()])),
+			"mint" | "Mint" => Ok(Self::Mint([
+				css_color_from_str("#fff"),
+				css_color_from_str("#0e1"),
+			])),
 			"fire" | "🔥" => Ok(Self::Fire([
-				"#000".to_string(),
-				"#700".to_string(),
-				"#f70".to_string(),
-				"#ff0".to_string(),
-				"#fff".to_string(),
+				css_color_from_str("#000"),
+				css_color_from_str("#700"),
+				css_color_from_str("#f70"),
+				css_color_from_str("#ff0"),
+				css_color_from_str("#fff"),
 			])),
 			"custom" => Ok(Self::Custom),
 			_ => Err(()),
@@ -82,9 +92,8 @@ impl core::str::FromStr for SubCmds {
 	}
 }
 
-fn print_known(c: &[String]) {
-	// to-do: validate const colors at compile-time
-	println!("{}", generate(&GradientType::Linear, c.to_vec()).unwrap());
+fn print_known(c: &[CSSColor]) {
+	println!("{}", generate(&GradientType::Linear, c.to_vec()));
 }
 
 #[allow(clippy::too_many_lines)] // lmao
@@ -144,15 +153,25 @@ fn main() -> ExitCode {
 			print_known(&c);
 		}
 		SubCmds::Custom => {
-			match generate(&GradientType::Linear, argv) {
-				Ok(svg) => {
-					println!("{}", svg);
+			let colors: Vec<_> =
+				argv.into_iter().map(CSSColor::new).collect();
+
+			for r in &colors {
+				match r {
+					Ok(_) => continue,
+					Err(e) => {
+						eprint!("{}", e);
+						return ExitCode::FAILURE;
+					}
 				}
-				Err(e) => {
-					eprint!("{}", e);
-					return ExitCode::FAILURE;
-				}
-			};
+			}
+			println!(
+				"{}",
+				generate(
+					&GradientType::Linear,
+					colors.into_iter().map(result::Result::unwrap).collect()
+				)
+			);
 		}
 	}
 
