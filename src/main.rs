@@ -12,7 +12,9 @@
 	clippy::empty_structs_with_brackets,
 	clippy::format_push_string
 )]
-#![allow(clippy::cargo_common_metadata)]
+// `uninlined_format_args` is part of `pedantic`, not `style`
+// https://github.com/rust-lang/rust-clippy/issues/10082
+#![allow(clippy::cargo_common_metadata, clippy::uninlined_format_args)]
 #![forbid(
 	unsafe_code,
 	clippy::mem_forget,
@@ -103,15 +105,15 @@ fn main() -> ExitCode {
 
 	let argv: Vec<String> = args().skip(1).collect();
 	if argv.is_empty() {
-		eprintln!("No arguments provided. Run `{NAME} help` for more info");
+		eprintln!("No arguments provided. Run `{} help` for more info", NAME);
 		return ExitCode::SUCCESS;
 	}
 
 	let subcmd = SubCmds::from_str(argv[0].as_str());
 	if subcmd == Err(()) {
 		eprintln!(
-			"Unrecognized sub-command:\n{}\nRun `{NAME} help` to get list of valid ones",
-			argv[0]
+			"Unrecognized sub-command:\n{}\nRun `{} help` to get list of valid ones",
+			argv[0], NAME
 		);
 		return ExitCode::FAILURE;
 	};
@@ -129,7 +131,7 @@ fn main() -> ExitCode {
 		SubCmds::Help => {
 			println!(
 				"\
-				usage: {NAME} <subcommand> [colors...]\n\
+				usage: {} <subcommand> [colors...]\n\
 				help | HELP | man | /? | ❔ | ❓ | ℹ️ | ℹ : print this text\n\
 				wb | WB: grayscale\n\
 				rainbow | 🌈: RYGCBM\n\
@@ -137,7 +139,8 @@ fn main() -> ExitCode {
 				mint | Mint : Linux Mint\n\
 				fire | 🔥 : is it a candle?\n\
 				custom : to specify arbitrary colors\
-			"
+			",
+				NAME
 			);
 		}
 		SubCmds::Wb(c) | SubCmds::Mint(c) => {
@@ -153,14 +156,13 @@ fn main() -> ExitCode {
 			print_known(&c);
 		}
 		SubCmds::Custom => {
-			let colors: Vec<_> =
-				argv.into_iter().map(CSSColor::new).collect();
+			let colors: Vec<_> = argv.into_iter().map(CSSColor::new).collect();
 
 			for r in &colors {
 				match r {
 					Ok(_) => continue,
 					Err(e) => {
-						eprint!("{e}");
+						eprint!("{}", e);
 						return ExitCode::FAILURE;
 					}
 				}

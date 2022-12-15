@@ -10,6 +10,7 @@
 	clippy::empty_structs_with_brackets,
 	clippy::format_push_string
 )]
+#![allow(clippy::uninlined_format_args)]
 #![deny(clippy::unwrap_used, clippy::float_arithmetic)]
 #![forbid(
 	unsafe_code,
@@ -76,8 +77,8 @@ pub enum GradientType {
 impl fmt::Display for GradientType {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		match self {
-			Self::Linear => write!(f, "{LINE}"),
-			Self::Radial => write!(f, "{RAD}"),
+			Self::Linear => write!(f, "{}", LINE),
+			Self::Radial => write!(f, "{}", RAD),
 		}
 	}
 }
