@@ -50,7 +50,7 @@ impl core::str::FromStr for SubCmds {
 		match input {
 			"help" | "HELP" | "man" | "/?" | "❔" | "❓" | "ℹ️" | "ℹ" => Ok(Self::Help),
 			"wb" | "WB" => Ok(Self::Wb(["#fff".to_string(), "#000".to_string()])),
-			// this is so redundant
+			// I know, this is horrible
 			"rainbow" | "🌈" => Ok(Self::Rainbow([
 				"#f00".to_string(),
 				"#ff0".to_string(),
