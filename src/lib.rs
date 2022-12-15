@@ -38,9 +38,7 @@ const RAD: &str = "radial";
 /// this `struct` is just a `String`,
 /// but guaranteed to be a subset, such that it matches the syntax of CSS colors
 #[derive(Debug, PartialEq, Eq, Clone)]
-pub struct CSSColor {
-	inner: String,
-}
+pub struct CSSColor(String);
 
 impl CSSColor {
 	/// # `CSSColor::new`
@@ -58,13 +56,13 @@ impl CSSColor {
 		if s.contains('"') {
 			return Err(ColorQuotes);
 		}
-		Ok(Self { inner: s })
+		Ok(Self(s))
 	}
 }
 
 impl fmt::Display for CSSColor {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "{}", self.inner)
+		write!(f, "{}", self.0)
 	}
 }
 
@@ -107,15 +105,6 @@ impl fmt::Display for ColorQuotes {
 // to-do: use `core` when stable
 impl std::error::Error for ColorQuotes {}
 
-/// # `sv3g::generate`
-///
-/// returns an `Err` if any color contains `"`, regardless if it's escaped or not.
-///
-/// this syntax validation is done for security reasons (prevent code injection).
-///
-/// ## Errors
-///
-/// `ColorQuotes`: happens when the string contains 1 or more double quotes (")
 #[must_use]
 pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
 	use fmt::Write as _;
