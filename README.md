@@ -2,11 +2,9 @@
 
 ## Usage
 
-**Don't.** This is still WIP. Go to [this branch](https://github.com/Rudxain/SV3G/tree/legacy-js) in the meantime.
-
-However, if you want to continue anyways, run this:
 ```sh
-cargo install --git https://github.com/Rudxain/SV3G.git && sv3g help
+cargo install --git https://github.com/Rudxain/SV3G.git \
+&& sv3g help
 ```
 
 ## Example
@@ -42,6 +40,7 @@ Since LMC has an event-listener for wallpaper files, and .wp.svg is already set 
 Windows users _can only dream_ of such a feature (I feel the urge to say "I use Arch BTW", but I'm not worthy, LMAO)
 
 And yes, I know LMC already has a "no picture gradient" feature, but it has 2 disadvantages:
+
 1. Only supports 2 colors
 2. [It isn't shown in the login screen](https://github.com/linuxmint/cinnamon/issues/11229)
 
@@ -63,4 +62,4 @@ I just posted this for people who may have similar (not identical) needs. Use at
 
 ## Related
 
-https://llamalab.com/automate/community/flows/42305
+[🌈Gradient 🖼Wallpaper Automate-flow](https://llamalab.com/automate/community/flows/42305)
