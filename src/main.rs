@@ -111,6 +111,7 @@ fn main() -> ExitCode {
 	// is there a better way?
 	let mut argv = argv;
 	argv.remove(0);
+	argv.shrink_to_fit();
 	let argv = argv;
 
 	// this feels redundant
