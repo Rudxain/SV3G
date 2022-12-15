@@ -33,16 +33,36 @@ fn div_usize_as_f64(n: usize, d: usize) -> f64 {
 const LINE: &str = "linear";
 const RAD: &str = "radial";
 
-/// Just like `Path` is just an `OsStr`,
+/// just like `Path` is internally an `OsStr`,
 /// this `struct` is just a `String`,
-/// but validated to be a subset that matches the syntax of CSS colors
+/// but guaranteed to be a subset, such that it matches the syntax of CSS colors
 pub struct CSSColor {
-	/// validated `String`
-	inner: String
+	inner: String,
 }
 
 impl CSSColor {
-    pub const fn new(inner: String) -> Self { Self { inner } }
+	/// # `CSSColor::new`
+	///
+	/// Directly wraps a `String` as a `CSSColor`, only if it has valid syntax.
+	///
+	/// The current implementation only checks for the presence of quotes,
+	/// so it it quite permissive.
+	/// More errors and stricter validation will be added later.
+	///
+	/// ## Errors
+	///
+	/// `ColorQuotes`: happens when the string contains 1 or more double quotes (")
+	pub fn new(s: String) -> Result<Self, ColorQuotes> {
+		if s.contains('"') {
+			return Err(ColorQuotes);
+		}
+		Ok(Self { inner: s })
+	}
+}
+impl fmt::Display for CSSColor {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "{}", self.inner)
+	}
 }
 
 pub enum GradientType {
@@ -84,11 +104,14 @@ impl fmt::Display for ColorQuotes {
 // to-do: use `core` when stable
 impl std::error::Error for ColorQuotes {}
 
+/// # `sv3g::generate`
+///
 /// returns an `Err` if any color contains `"`, regardless if it's escaped or not.
 ///
 /// this syntax validation is done for security reasons (prevent code injection).
 ///
-/// # Errors
+/// ## Errors
+///
 /// `ColorQuotes`: happens when the string contains 1 or more double quotes (")
 pub fn generate(t: &GradientType, colors: Vec<String>) -> Result<String, ColorQuotes> {
 	use fmt::Write as _;
