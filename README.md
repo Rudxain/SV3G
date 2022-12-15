@@ -44,8 +44,6 @@ And yes, I know LMC already has a "no picture gradient" feature, but it has 2 di
 1. Only supports 2 colors
 2. [It isn't shown in the login screen](https://github.com/linuxmint/cinnamon/issues/11229)
 
-The funny thing is that SVGs without `viewBox` aren't rendered correctly in the login screen, so SV3G doesn't fully solve my problem, it's just a dirty patch, lol
-
 ## Why Rust?
 
 This started as a very basic POSIX-compliant shell script that printed a solid-color SVG. Then, I ported it to both Python and Javascript.
