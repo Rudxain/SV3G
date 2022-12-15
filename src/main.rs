@@ -103,15 +103,15 @@ fn main() -> ExitCode {
 
 	let argv: Vec<String> = args().skip(1).collect();
 	if argv.is_empty() {
-		eprintln!("No arguments provided. Run `{} help` for more info", NAME);
+		eprintln!("No arguments provided. Run `{NAME} help` for more info");
 		return ExitCode::SUCCESS;
 	}
 
 	let subcmd = SubCmds::from_str(argv[0].as_str());
 	if subcmd == Err(()) {
 		eprintln!(
-			"Unrecognized sub-command:\n{}\nRun `{} help` to get list of valid ones",
-			argv[0], NAME
+			"Unrecognized sub-command:\n{}\nRun `{NAME} help` to get list of valid ones",
+			argv[0]
 		);
 		return ExitCode::FAILURE;
 	};
@@ -160,7 +160,7 @@ fn main() -> ExitCode {
 				match r {
 					Ok(_) => continue,
 					Err(e) => {
-						eprint!("{}", e);
+						eprint!("{e}");
 						return ExitCode::FAILURE;
 					}
 				}

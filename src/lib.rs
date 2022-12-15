@@ -76,8 +76,8 @@ pub enum GradientType {
 impl fmt::Display for GradientType {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		match self {
-			Self::Linear => write!(f, "{}", LINE),
-			Self::Radial => write!(f, "{}", RAD),
+			Self::Linear => write!(f, "{LINE}"),
+			Self::Radial => write!(f, "{RAD}"),
 		}
 	}
 }
@@ -154,7 +154,7 @@ pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
 		{}\
 		</{}Gradient>\
 		</defs>\
-		<rect width=\"100%\" height=\"100%\" fill=\"url('#g')\"/>\
+		<rect width=\"100%\" height=\"100%\" fill=\"url(#g)\"/>\
 		</svg>\
 		",
 		t,
