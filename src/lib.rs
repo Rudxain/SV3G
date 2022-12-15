@@ -32,31 +32,18 @@ fn div_usize_as_f64(n: usize, d: usize) -> f64 {
 
 const LINE: &str = "linear";
 const RAD: &str = "radial";
-/*
-// is this really a good idea?
-// I just want to validate colors at compile-time, to avoid `unwrap`
-/// 32bit color value
-pub struct Color32 {
-	/// red
-	r: u8,
-	/// green
-	g: u8,
-	/// blue
-	b: u8,
-	/// alpha
-	a: u8
+
+/// Just like `Path` is just an `OsStr`,
+/// this `struct` is just a `String`,
+/// but validated to be a subset that matches the syntax of CSS colors
+pub struct CSSColor {
+	/// validated `String`
+	inner: String
 }
 
-impl Color32 {
-	pub fn new(r: u8, g: u8, b: u8, a: u8) -> Self { Self { r, g, b, a } }
+impl CSSColor {
+    pub const fn new(inner: String) -> Self { Self { inner } }
 }
-
-impl fmt::Display for Color32 {
-	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		write!(f, "#{:02x}{:02x}{:02x}{:02x}", self.r, self.g, self.b, self.a)
-	}
-}
-*/
 
 pub enum GradientType {
 	Linear,

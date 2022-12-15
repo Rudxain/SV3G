@@ -32,11 +32,15 @@ use std::{process::ExitCode, str::FromStr};
 use sv3g::*;
 
 #[derive(Debug, PartialEq)]
+// I decided to use wrapper variants,
+// because they are better for compile-time checks (AFAIK)
 enum SubCmds {
 	Help,
+	/// white and black
 	Wb([String; 2]),
+	/// 🌈
 	Rainbow([String; 6]),
-	Rgb([String; 3]),
+	// skybox
 	Sky([String; 3]),
 	Mint([String; 2]),
 	Fire([String; 5]),
@@ -58,11 +62,6 @@ impl core::str::FromStr for SubCmds {
 				"#0ff".to_string(),
 				"#00f".to_string(),
 				"#f0f".to_string(),
-			])),
-			"rgb" | "RGB" => Ok(Self::Rgb([
-				"#f00".to_string(),
-				"#0f0".to_string(),
-				"#00f".to_string(),
 			])),
 			"sky" => Ok(Self::Sky([
 				"#00e".to_string(),
@@ -125,7 +124,6 @@ fn main() -> ExitCode {
 				help | HELP | man | /? | ❔ | ❓ | ℹ️ | ℹ : print this text\n\
 				wb | WB: grayscale\n\
 				rainbow | 🌈: RYGCBM\n\
-				rgb | RGB: Red, Green, Blue\n\
 				sky : like a skybox\n\
 				mint | Mint : Linux Mint\n\
 				fire | 🔥 : is it a candle?\n\
@@ -139,7 +137,7 @@ fn main() -> ExitCode {
 		SubCmds::Rainbow(c) => {
 			print_known(&c);
 		}
-		SubCmds::Rgb(c) | SubCmds::Sky(c) => {
+		SubCmds::Sky(c) => {
 			print_known(&c);
 		}
 		SubCmds::Fire(c) => {
