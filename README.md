@@ -52,6 +52,8 @@ I decided to not use Py, because devs tend to generate client-side SVGs in brows
 
 Then, I did a [RIIR](https://github.com/ansuz/RIIR) and here we are!
 
+I decided to not have dependencies, because I want to learn Rust deeply.
+
 ## Disclaimer
 
 This is (mostly) a tool I use personally, so I'm not responsible for keeping backwards-compatibility, nor to notify about breaking-changes. I may rewrite this in any lang, and target any environment, **at any time without warning**.
