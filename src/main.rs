@@ -162,7 +162,7 @@ fn main() -> ExitCode {
 				match r {
 					Ok(_) => continue,
 					Err(e) => {
-						eprint!("{}", e);
+						eprintln!("{}", e);
 						return ExitCode::FAILURE;
 					}
 				}
