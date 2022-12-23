@@ -108,6 +108,7 @@ impl std::error::Error for ColorQuotes {}
 // https://github.com/rust-lang/rustfmt/issues/5320#issuecomment-1363417363
 
 #[must_use]
+#[allow(clippy::too_many_lines)]
 pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
 	use fmt::Write as _;
 
@@ -150,9 +151,10 @@ pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
 		</svg>\
 		",
 		t,
-		match t {
-			GradientType::Linear => " gradientTransform=\"rotate(90)\"",
-			GradientType::Radial => "",
+		if *t == GradientType::Linear {
+			" gradientTransform=\"rotate(90)\""
+		} else {
+			""
 		},
 		body,
 		t
