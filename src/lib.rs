@@ -24,9 +24,10 @@
 	clippy::float_cmp_const
 )]
 
-use core::fmt;
+use core::{fmt, str::FromStr};
 
 #[allow(clippy::cast_precision_loss, clippy::float_arithmetic)]
+/*const */
 fn div_usize_as_f64(n: usize, d: usize) -> f64 {
 	n as f64 / d as f64
 }
@@ -66,13 +67,15 @@ impl fmt::Display for CSSColor {
 	}
 }
 
+#[derive(Debug, PartialEq, Eq)]
 pub enum GradientType {
 	Linear,
 	Radial,
-	//Conic
+	//Conic,
 }
 
 impl fmt::Display for GradientType {
+	// I wonder why Rust needs boilerplate here
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
 		match self {
 			Self::Linear => write!(f, "{}", LINE),
@@ -80,10 +83,9 @@ impl fmt::Display for GradientType {
 		}
 	}
 }
-
-impl core::str::FromStr for GradientType {
+// I hope rustc optimizes both of these conversions into no-ops
+impl FromStr for GradientType {
 	type Err = ();
-
 	fn from_str(s: &str) -> Result<Self, Self::Err> {
 		match s.to_ascii_lowercase().as_str() {
 			"l" | LINE => Ok(Self::Linear),
@@ -101,9 +103,9 @@ impl fmt::Display for ColorQuotes {
 		write!(f, "CSS colors must not contain quotes")
 	}
 }
-
-// to-do: use `core` when stable
+//core
 impl std::error::Error for ColorQuotes {}
+// https://github.com/rust-lang/rustfmt/issues/5320#issuecomment-1363417363
 
 #[must_use]
 pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
@@ -118,7 +120,7 @@ pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
 		.into_iter()
 		.enumerate()
 		.map(|(i, c)| {
-			// `+ 0x10` is temporary. to-do: use a better estimation
+			// to-do: use a better estimation than `0x10`
 			let mut s = String::with_capacity(c.len() + 0x10);
 			let _ = write!(
 				s,
@@ -130,7 +132,7 @@ pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
 		})
 		.collect();
 
-	// `+ 0x40` is temporary. to-do: use a better estimation
+	// to-do: use a better estimation than `0x40`
 	let mut out = String::with_capacity(body.len() + 0x40);
 
 	let _ = write!(
@@ -157,4 +159,25 @@ pub fn generate(t: &GradientType, colors: Vec<CSSColor>) -> String {
 	);
 
 	out
+}
+
+#[cfg(test)]
+#[test]
+fn identical_enum_str_gradient_conversion() {
+	assert_eq!(
+		GradientType::from_str(LINE).expect("").to_string(),
+		LINE.to_string()
+	);
+	assert_eq!(
+		GradientType::from_str(RAD).expect("").to_string(),
+		RAD.to_string()
+	);
+	assert_eq!(
+		GradientType::from_str(&GradientType::Linear.to_string()).expect(""),
+		GradientType::Linear
+	);
+	assert_eq!(
+		GradientType::from_str(&GradientType::Radial.to_string()).expect(""),
+		GradientType::Radial
+	);
 }

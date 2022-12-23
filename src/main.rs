@@ -1,6 +1,7 @@
 #![warn(
 	unused,
 	future_incompatible,
+	clippy::unwrap_used,
 	clippy::exit,
 	clippy::cargo,
 	clippy::pedantic,
@@ -27,13 +28,14 @@
 	clippy::float_cmp,
 	clippy::float_cmp_const
 )]
-
-use std::{process::ExitCode, result, str::FromStr};
+use core::str::FromStr;
+use std::process::ExitCode;
 
 #[allow(clippy::wildcard_imports)]
 use sv3g::*;
 
 fn css_color_from_str(s: &str) -> CSSColor {
+	#[allow(clippy::unwrap_used)]
 	CSSColor::new(s.to_string()).unwrap()
 }
 
@@ -53,7 +55,7 @@ enum SubCmds {
 	Custom,
 }
 
-impl core::str::FromStr for SubCmds {
+impl FromStr for SubCmds {
 	type Err = ();
 
 	fn from_str(input: &str) -> Result<Self, Self::Err> {
@@ -98,84 +100,75 @@ fn print_known(c: &[CSSColor]) {
 	println!("{}", generate(&GradientType::Linear, c.to_vec()));
 }
 
-#[allow(clippy::too_many_lines)] // lmao
 fn main() -> ExitCode {
 	use std::env::args;
 	const NAME: &str = "sv3g";
 
-	let argv: Vec<String> = args().skip(1).collect();
-	if argv.is_empty() {
+	if args().count() < 2 {
 		eprintln!("No arguments provided. Run `{} help` for more info", NAME);
 		return ExitCode::SUCCESS;
 	}
 
-	let subcmd = SubCmds::from_str(argv[0].as_str());
-	if subcmd == Err(()) {
-		eprintln!(
-			"Unrecognized sub-command:\n{}\nRun `{} help` to get list of valid ones",
-			argv[0], NAME
-		);
-		return ExitCode::FAILURE;
-	};
+	let arg1: String = args().skip(1).take(1).collect();
 
-	// is there a better way?
-	let mut argv = argv;
-	argv.remove(0);
-	argv.shrink_to_fit();
-	let argv = argv;
+	if let Ok(subcmd) = SubCmds::from_str(arg1.as_str()) {
+		match subcmd {
+			SubCmds::Help => {
+				println!(
+					"\
+					usage: {} <subcommand> [colors...]\n\
+					help | HELP | man | /? | ❔ | ❓ | ℹ️ | ℹ : print this text\n\
+					wb | WB: grayscale\n\
+					rainbow | 🌈: RYGCBM\n\
+					sky : like a skybox\n\
+					mint | Mint : Linux Mint\n\
+					fire | 🔥 : is it a candle?\n\
+					custom : to specify arbitrary colors\
+				",
+					NAME
+				);
+			}
+			SubCmds::Wb(c) | SubCmds::Mint(c) => {
+				print_known(&c);
+			}
+			SubCmds::Rainbow(c) => {
+				print_known(&c);
+			}
+			SubCmds::Sky(c) => {
+				print_known(&c);
+			}
+			SubCmds::Fire(c) => {
+				print_known(&c);
+			}
+			SubCmds::Custom => {
+				let colors: Vec<_> = args().skip(2).into_iter().map(CSSColor::new).collect();
 
-	// this feels redundant
-	let subcmd = subcmd.unwrap();
-
-	match subcmd {
-		SubCmds::Help => {
-			println!(
-				"\
-				usage: {} <subcommand> [colors...]\n\
-				help | HELP | man | /? | ❔ | ❓ | ℹ️ | ℹ : print this text\n\
-				wb | WB: grayscale\n\
-				rainbow | 🌈: RYGCBM\n\
-				sky : like a skybox\n\
-				mint | Mint : Linux Mint\n\
-				fire | 🔥 : is it a candle?\n\
-				custom : to specify arbitrary colors\
-			",
-				NAME
-			);
-		}
-		SubCmds::Wb(c) | SubCmds::Mint(c) => {
-			print_known(&c);
-		}
-		SubCmds::Rainbow(c) => {
-			print_known(&c);
-		}
-		SubCmds::Sky(c) => {
-			print_known(&c);
-		}
-		SubCmds::Fire(c) => {
-			print_known(&c);
-		}
-		SubCmds::Custom => {
-			let colors: Vec<_> = argv.into_iter().map(CSSColor::new).collect();
-
-			for r in &colors {
-				match r {
-					Ok(_) => continue,
-					Err(e) => {
-						eprintln!("{}", e);
-						return ExitCode::FAILURE;
+				for r in &colors {
+					match r {
+						Ok(_) => continue,
+						Err(e) => {
+							eprintln!("{}", e);
+							return ExitCode::FAILURE;
+						}
 					}
 				}
+				println!(
+					"{}",
+					generate(
+						&GradientType::Linear,
+						colors
+							.into_iter()
+							.map(core::result::Result::unwrap)
+							.collect()
+					)
+				);
 			}
-			println!(
-				"{}",
-				generate(
-					&GradientType::Linear,
-					colors.into_iter().map(result::Result::unwrap).collect()
-				)
-			);
 		}
+		return ExitCode::SUCCESS;
 	}
-
-	ExitCode::SUCCESS
+	eprintln!(
+		"Unrecognized sub-command:\n{}\nRun `{} help` to get list of valid ones",
+		arg1, NAME
+	);
+	ExitCode::FAILURE
 }
