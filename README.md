@@ -13,7 +13,7 @@ Personally, I use the program like this (in Linux Mint Cinnamon):
 
 ```sh
 # when using dark-theme in a pitch-black room
-sv3g custom '#000' > .wp.svg
+sv3g black > .wp.svg
 
 # bloody dark, to reduce blue-light emission
 sv3g custom '#700' '#000' > .wp.svg
