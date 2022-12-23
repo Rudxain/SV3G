@@ -44,6 +44,7 @@ fn css_color_from_str(s: &str) -> CSSColor {
 #[derive(Debug, PartialEq)]
 enum SubCmds {
 	Help,
+	Black([CSSColor; 1]),
 	/// white and black
 	Wb([CSSColor; 2]),
 	/// 🌈
@@ -61,35 +62,17 @@ impl FromStr for SubCmds {
 	fn from_str(input: &str) -> Result<Self, Self::Err> {
 		match input {
 			"help" | "HELP" | "man" | "/?" | "❔" | "❓" | "ℹ️" | "ℹ" => Ok(Self::Help),
-			"wb" | "WB" => Ok(Self::Wb([
-				css_color_from_str("#fff"),
-				css_color_from_str("#000"),
-			])),
+			"black" => Ok(Self::Black([css_color_from_str("#000")])),
+			"wb" | "WB" => Ok(Self::Wb(["#fff", "#000"].map(css_color_from_str))),
 			// I know, this is horrible
-			"rainbow" | "🌈" => Ok(Self::Rainbow([
-				css_color_from_str("#f00"),
-				css_color_from_str("#ff0"),
-				css_color_from_str("#0f0"),
-				css_color_from_str("#0ff"),
-				css_color_from_str("#00f"),
-				css_color_from_str("#f0f"),
-			])),
-			"sky" => Ok(Self::Sky([
-				css_color_from_str("#00e"),
-				css_color_from_str("#07e"),
-				css_color_from_str("#0ff"),
-			])),
-			"mint" | "Mint" => Ok(Self::Mint([
-				css_color_from_str("#fff"),
-				css_color_from_str("#0e1"),
-			])),
-			"fire" | "🔥" => Ok(Self::Fire([
-				css_color_from_str("#000"),
-				css_color_from_str("#700"),
-				css_color_from_str("#f70"),
-				css_color_from_str("#ff0"),
-				css_color_from_str("#fff"),
-			])),
+			"rainbow" | "🌈" => Ok(Self::Rainbow(
+				["#f00", "#ff0", "#0f0", "#0ff", "#00f", "#f0f"].map(css_color_from_str),
+			)),
+			"sky" => Ok(Self::Sky(["#00e", "#07e", "#0ff"].map(css_color_from_str))),
+			"mint" | "Mint" => Ok(Self::Mint(["#fff", "#0e1"].map(css_color_from_str))),
+			"fire" | "🔥" => Ok(Self::Fire(
+				["#000", "#700", "#f70", "#ff0", "#fff"].map(css_color_from_str),
+			)),
 			"custom" => Ok(Self::Custom),
 			_ => Err(()),
 		}
@@ -100,6 +83,7 @@ fn print_known(c: &[CSSColor]) {
 	println!("{}", generate(&GradientType::Linear, c.to_vec()));
 }
 
+#[allow(clippy::too_many_lines)]
 fn main() -> ExitCode {
 	use std::env::args;
 	const NAME: &str = "sv3g";
@@ -118,8 +102,9 @@ fn main() -> ExitCode {
 					"\
 					usage: {} <subcommand> [colors...]\n\
 					help | HELP | man | /? | ❔ | ❓ | ℹ️ | ℹ : print this text\n\
-					wb | WB: grayscale\n\
-					rainbow | 🌈: RYGCBM\n\
+					black : pitch black\n\
+					wb | WB : grayscale\n\
+					rainbow | 🌈 : RYGCBM\n\
 					sky : like a skybox\n\
 					mint | Mint : Linux Mint\n\
 					fire | 🔥 : is it a candle?\n\
@@ -127,6 +112,9 @@ fn main() -> ExitCode {
 				",
 					NAME
 				);
+			}
+			SubCmds::Black(c) => {
+				print_known(&c);
 			}
 			SubCmds::Wb(c) | SubCmds::Mint(c) => {
 				print_known(&c);
