@@ -41,15 +41,18 @@ fn css_color_from_str(s: &str) -> CSSColor {
 
 // I decided to use wrapper variants,
 // because they are better for compile-time checks (AFAIK)
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Debug, PartialEq)]
 enum SubCmds {
 	Help,
 	Black([CSSColor; 1]),
 	/// white and black
-	Wb([CSSColor; 2]),
+	WB([CSSColor; 2]),
 	/// 🌈
 	Rainbow([CSSColor; 6]),
-	// skybox
+	/// yellow cyan magenta
+	YCM([CSSColor; 3]), // YMCA!!!
+	/// skybox
 	Sky([CSSColor; 3]),
 	Mint([CSSColor; 2]),
 	Fire([CSSColor; 5]),
@@ -63,11 +66,12 @@ impl FromStr for SubCmds {
 		match input {
 			"help" | "HELP" | "man" | "/?" | "❔" | "❓" | "ℹ️" | "ℹ" => Ok(Self::Help),
 			"black" => Ok(Self::Black([css_color_from_str("#000")])),
-			"wb" | "WB" => Ok(Self::Wb(["#fff", "#000"].map(css_color_from_str))),
+			"wb" | "WB" => Ok(Self::WB(["#fff", "#000"].map(css_color_from_str))),
 			// I know, this is horrible
 			"rainbow" | "🌈" => Ok(Self::Rainbow(
 				["#f00", "#ff0", "#0f0", "#0ff", "#00f", "#f0f"].map(css_color_from_str),
 			)),
+			"ycm" | "YCM" => Ok(Self::YCM(["#ff0", "#0ff", "#f0f"].map(css_color_from_str))),
 			"sky" => Ok(Self::Sky(["#00e", "#07e", "#0ff"].map(css_color_from_str))),
 			"mint" | "Mint" => Ok(Self::Mint(["#fff", "#0e1"].map(css_color_from_str))),
 			"fire" | "🔥" => Ok(Self::Fire(
@@ -105,6 +109,7 @@ fn main() -> ExitCode {
 					black : pitch black\n\
 					wb | WB : grayscale\n\
 					rainbow | 🌈 : RYGCBM\n\
+					ycm | YCM : yellow cyan magenta\n\
 					sky : like a skybox\n\
 					mint | Mint : Linux Mint\n\
 					fire | 🔥 : is it a candle?\n\
@@ -116,13 +121,13 @@ fn main() -> ExitCode {
 			SubCmds::Black(c) => {
 				print_known(&c);
 			}
-			SubCmds::Wb(c) | SubCmds::Mint(c) => {
+			SubCmds::WB(c) | SubCmds::Mint(c) => {
 				print_known(&c);
 			}
 			SubCmds::Rainbow(c) => {
 				print_known(&c);
 			}
-			SubCmds::Sky(c) => {
+			SubCmds::Sky(c) | SubCmds::YCM(c) => {
 				print_known(&c);
 			}
 			SubCmds::Fire(c) => {
