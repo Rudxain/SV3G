@@ -16,17 +16,20 @@ Personally, I use the program like this (in Linux Mint Cinnamon):
 sv3g black > .wp.svg
 
 # bloody dark, to reduce blue-light emission
-sv3g custom '#700' '#000' > .wp.svg
+sv3g custom \#700 \#000 > .wp.svg
 # I also set the accent color to red in that case
 
 # when using light-theme with "mint-green" accent color
 sv3g mint > .wp.svg
 
 # when I want to be fully awake and focused
-sv3g custom '#fff' > .wp.svg
+sv3g custom \#fff > .wp.svg
 
 # pride lol (I usually don't use this, because it's too colorful)
 sv3g rainbow > .wp.svg
+
+# funky!
+sv3g YCM > .wp.svg
 
 # warm and comfy
 sv3g fire > .wp.svg
@@ -35,7 +38,7 @@ sv3g fire > .wp.svg
 sv3g wb > .wp.svg
 ```
 
-Since LMC has an event-listener for wallpaper files, and .wp.svg is already set as WP (by me), LMC will detect the file-update and auto-change the WP background, nice!
+Since LMC has an event-listener for wallpaper files, and `.wp.svg` is already set as WP (by me), LMC will detect the file-update and auto-change the WP background, nice!
 
 Windows users _can only dream_ of such a feature (I feel the urge to say "I use Arch BTW", but I'm not worthy, LMAO)
 
