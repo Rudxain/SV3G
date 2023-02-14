@@ -1,5 +1,9 @@
 # SV3G
 
+This has been archived because I found [this](https://play.google.com/store/apps/details?id=com.sharpregion.tapet).
+
+I'll probably delete this repo in some weeks
+
 ## Usage
 
 ```sh
